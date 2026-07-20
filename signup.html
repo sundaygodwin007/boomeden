@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOOMEDEN - Create Account</title>
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+    <div class="container">
+        <h1 id="create-text">Create Your BOOMEDEN Account</h1>
+        <div class="form-group">
+            <label for="first">Firstname</label>
+            <input type="text" id="first" placeholder="Enter your firstname">
+        </div>
+
+        <div class="form-group">
+            <label for="last">Lastname</label>
+            <input type="text" id="last" placeholder="Enter your lastname">
+        </div>
+
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter your username">
+        </div>
+
+        <div class="form-group">
+            <label for="dob">Date of Birth</label>
+            <input type="date" id="dob" name="dob" placeholder="Enter your date of birth">
+        </div>
+
+  <div class="form-group">
+            <!-- COUNTRY DROPDOWN -->
+<label for="country">Country</label>
+<select id="country" required>
+  <option value="">Select Country</option>
+  <option value="Nigeria">Nigeria</option>
+  <option value="USA">United States</option>
+  <option value="UK">United Kingdom</option>
+  <option value="Canada">Canada</option>
+  <option value="Ghana">Ghana</option>
+  <option value="South Africa">South Africa</option>
+</select>
+        </div>
+
+          <div class="form-group">
+            <label for="state">State</label>
+<select id="state" required>
+  <option value="">Select State</option>
+</select>
+        </div>
+
+        
+        <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender">
+                <option value="">Select your gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter your email">
+        </div>
+
+        <!-- <div class="form-group">
+            <select id="countryCode">
+                <option value="+234">🇳🇬 +234 Nigeria</option>
+                <option value="+1">🇺🇸 +1 USA</option>
+                <option value="+44">🇬🇧 +44 UK</option>
+                <option value="+233">🇬🇭 +233 Ghana</option>
+                <option value="+1">🇨🇦 +1 Canada</option>
+                <input type="tel" id="phoneNumber" placeholder="8012345678">
+            </select>
+        </div> -->
+
+        <div class="form-group">
+                 <label>Phone Number</label>
+                 <div class="phone-group">
+                     <select class="country-code"  id="countryCode">
+                         <option value="+234">🇳🇬 +234 Nigeria</option>
+                <option value="+1">🇺🇸 +1 USA</option>
+                <option value="+44">🇬🇧 +44 UK</option>
+                <option value="+233">🇬🇭 +233 Ghana</option>
+                <option value="+1">🇨🇦 +1 Canada</option>
+                        </select>
+                        <input type="tel" id="phoneNumber"  placeholder="8012345678">
+                    </div>
+</div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Create a password">
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" placeholder="Confirm your password">
+        </div>
+    <button type="button" id="signupBtn">Sign Up</button>
+
+    
+        <p class="link-text">
+            Already have an account? <a href="login.html">Login here</a>
+        </p>
+
+    </div>
+
+        <script type="module" src="signup.js"></script>
+
+    </body>
+    </html>
+</body>
+</html>

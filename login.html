@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOOMEDEN - Login</title>
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+  <!-- grouped all the loging details in to one container called container -->
+    <div class="container">
+        <h1 id="create-text">Welcome Back to BOOMEDEN</h1>
+
+        <!-- gave all input boxes an ID so i can call them later in javascript -->
+        <div class="form-group">
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" placeholder="Enter your email">
+        </div>
+        <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" placeholder="Enter your password">
+        </div>
+
+        <!-- gave the button an ID of loginBtn so i can call it later in javascript -->
+        <button id="loginBtn">Login</button>
+
+        <p class="link-text">
+            Don't have an account? <a href="signup.html">Create an account</a>
+        </p>
+        <p>OR</p>
+        <p><a href="forgot.html" id="forgotPassword">Forgot Password?</a></p>
+    </div>
+
+    <script type="module" src="login.js"></script>
+</body>
+</html>

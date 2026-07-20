@@ -1,0 +1,100 @@
+/* style for signup, login, forgot password, OTP */
+
+/* Base Styles for the Application */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* style for the body e.g adding background-color, positioning the items, e.t.c */
+body {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px; /* added so container no touch edge on mobile */
+}
+
+/* styles for the container, the white box where all the details are in */
+.container{
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  width: 90%;
+  max-width: 400px;
+}
+
+/* aligned the h1 in the container class and has the id of create-text to the center */
+.container #create-text{
+    text-align: center;
+}
+
+/* style for the heading of h2 only */
+h2,h1 {
+  text-align: center;
+  color: #fcfdfd;
+  margin-bottom: 25px;
+}
+
+
+input{
+    width:100%;
+    padding: 8px;
+}
+
+
+/* style for the button */
+button {
+  width: 100%;
+  padding: 12px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #764ba2;
+}
+
+/* END OF THE DESKTOP/LARGE VIEW */
+
+
+
+
+
+
+
+
+/* ===== MOBILE RESPONSIVE ===== */
+/* if the width of the device is from 600px and below then it should display in this size */
+@media (max-width: 600px) {
+  .container {
+    padding: 20px; /* smaller padding on phone */
+    width: 95%; /* take more of the screen */
+    border-radius: 10px;
+  }
+
+  /* style for the header 2 (h2) */
+  h2 {
+    font-size: 22px; /* smaller heading */
+    margin-bottom: 20px;
+  }
+
+
+
+  /* Make phone row stack on very small screens */
+  .phone-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

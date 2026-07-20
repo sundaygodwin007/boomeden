@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Forgot Password</title>
+  <link rel="stylesheet" href="forgot.css">
+
+  <!-- EmailJS must be in head -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>emailjs.init("aWtF4GeY9bMwSDynC");</script>
+</head>
+<body>
+<div class="auth-container">
+  <h1 id="header1">BOOMEDEN</h1>
+  <h2>Forgot Password</h2>
+  <input id="resetEmail" type="email" placeholder="Enter your email">
+  <button id="sendOtpBtn">Send OTP</button>
+</div>
+
+<!-- Firebase v8 - NO MODULES -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<!-- THIS IS THE IMPORTANT ONE - LOAD YOUR JS -->
+<script src="forgot.js"></script>  
+</body>
+</html>

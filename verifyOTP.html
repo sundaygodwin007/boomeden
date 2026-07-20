@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Verify OTP - BOOMEDEN</title>
+  <link rel="stylesheet" href="auth.css"> 
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div class="auth-container"> <!-- use whatever class you use in auth.css -->
+    <h2 class="verify">Verify OTP</h2>
+    <p>We sent a 6-digit code to your email</p>
+    
+    <input type="text" id="otpInput" placeholder="Enter 6 digit code" maxlength="6">
+    <button id="verifyBtn">Verify</button>
+
+    <!--  -->
+<p>
+  <button id="resendBtn" type="button">Resend OTP</button>
+  <span id="countdown"></span> <!-- This will show 30s timer -->
+</p>
+  </div>
+
+  <script src="verifyOTP.js"></script>
+</body>
+</html>
