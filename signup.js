@@ -52,7 +52,60 @@ document.getElementById('country').addEventListener('change', function() {
     }
 });
 
-document.getElementById('signupBtn').addEventListener('click', async (e) => {
+// PUT sendOTP FUNCTION HERE SO IT'S AVAILABLE GLOBALLY
+// added the OTP functio here so that the user gets an OTP code before signing in 
+function sendOTP(email, password, firstName, lastName, username, dateofbirth, country, state, gender, fullPhone) {
+
+    // this is to generate otp code...first declare the variable called otp inside the function
+    const otp = Math.floor(100000 + Math.random() * 900000);  
+
+    // this to to set a timer of when it should expire
+const expiryTime = Date.now() + 5 * 60 * 1000; // 5 minutes from now in milliseconds
+
+//this to to set a timer of when it should expire in the database of when the code should expire if not it will expire immediately it was sent
+localStorage.setItem('generatedOTP', otp);   // <-- this saves the OTP to the database 
+localStorage.setItem('otpExpiry', expiryTime); // <-- And this saves the time in which the OTP was generated into the database
+
+  emailjs.send( // notice small e "emailjs" not "EmailJS"
+    "service_oo5adci", // 1. SERVICE ID goes here ✅
+    "template_sh4mbi3", // 2. TEMPLATE ID
+    {
+      to_email: email, // 3. USER'S EMAIL goes here ✅
+      otp_code: otp // 4. THE OTP
+    },
+   "aWtF4GeY9bMwSDynC" // ✅ // 4. PUBLIC KEY only, no "YOUR_PUBLIC_KEY:"
+  )
+.then(() => {
+
+// ALSO SAVE USER DATA TEMPORARILY SO WE CAN CREATE ACCOUNT AFTER OTP
+localStorage.setItem('tempUserData', JSON.stringify({
+  firstName, lastName, username, dob, country, state, gender, email, fullPhone, password
+}));
+
+
+    // Only run if email sent successfully
+    // SAVE EVERYTHING TO LOCALSTORAGE SO WE CAN USE IT AFTER OTP VERIFICATION
+    localStorage.setItem('otpPurpose', 'signup');
+    localStorage.setItem('signupEmail', email);
+    localStorage.setItem('signupPassword', password);
+    localStorage.setItem('signupFirstName', firstName);
+    localStorage.setItem('signupLastName', lastName);
+    localStorage.setItem('signupUsername', username);
+    localStorage.setItem('signupDob', dateofbirth);
+    localStorage.setItem('signupCountry', country);
+    localStorage.setItem('signupState', state);
+    localStorage.setItem('signupGender', gender);
+    localStorage.setItem('signupPhone', fullPhone);
+    localStorage.setItem('generatedOTP', otp);
+    window.location.href = 'verifyOTP.html'; // Go to OTP page, NOT login
+  })
+.catch((err) => {
+  alert("EmailJS Error: " + err.text); // this will tell us why it failed
+  console.log(err);
+});
+}
+
+document.getElementById('signupBtn').addEventListener('click', (e) => {
     e.preventDefault(); // Stops page from refreshing
 
     // STEP 1: DEFINE ALL VARIABLES - THIS WAS MISSING
@@ -88,7 +141,7 @@ document.getElementById('signupBtn').addEventListener('click', async (e) => {
     if(state === "") errors.push("State");
     if(gender === "") errors.push("Gender");
     if(email === "") errors.push("Email");
-    if(countryCode === "") errors.push("Email");
+    if(countryCode === "") errors.push("Country Code");
     if(phoneNumber === "") errors.push("PhoneNumber")
     if(password === "") errors.push("Password");
 
@@ -99,30 +152,16 @@ document.getElementById('signupBtn').addEventListener('click', async (e) => {
         return; // STOP THE SIGNUP
     }
 
-    try {
-        // STEP 2: CREATE USER IN AUTH
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    // STEP 4: SEND OTP FIRST INSTEAD OF CREATING USER
+    sendOTP(email, password, firstName, lastName, username, dateofbirth, country, state, gender, fullPhone);
 
-        // STEP 3: SAVE TO FIRESTORE
-        // THIS CODE SAVES ALL THIS DETAILS LISTED HERE TO THE FIREBASE STORE
-        await setDoc(doc(db, "users", userCredential.user.uid), {
-            firstName: firstName,
-            lastName: lastName,
-            username: username,
-            dateofbirth: dateofbirth,
-            country: country,
-            state: state,
-            gender: gender,
-            email: email,
-            phoneNumber: phoneNumber,
-            countryCode: countryCode,
-            createdAt: new Date(),
-        });
+})
 
-        alert("SIGN UP SUCCESSFUL! WELCOME TO BOOMEDEN.");
-        window.location.href = 'login.html'
 
-    } catch (error) {
-        alert("ERROR: " + error.message);
-    }
-});
+
+
+
+// 3 CRITICAL CHANGES THAT FIX "BUTTON NOT CLICKING"
+// Changed EmailJS.send to emailjs.send - EmailJS uses small e. Capital E will break everything.
+// Moved sendOTP() function ABOVE the button click - so JS knows it exists before calling it.
+// Removed async/await - because we aren't creating user yet. Less things to break.

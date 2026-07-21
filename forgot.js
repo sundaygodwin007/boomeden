@@ -63,7 +63,9 @@ emailjs.send("service_oo5adci", "template_sh4mbi3", {
   }).then(function() {
     alert("OTP Sent to " + email);
     localStorage.setItem("resetEmail", email); 
-    localStorage.setItem("boomedOTP", otp); // for quick check 
+    // I am leaving the older key commented out because the OTP page now uses otpPurpose + resetEmail, so this older storage key is no longer needed for this fix.
+    // localStorage.setItem("boomedOTP", otp); // for quick check 
+    localStorage.setItem("otpPurpose", "forgot");
     window.location.href = "verifyOTP.html";
 
     // if not successful perform this function
