@@ -1,3 +1,5 @@
+document.addEventListener('DOMContentLoaded', function() {
+
 // Firebase Setup
   //  same firebase configuration that i only get from firebase
     const firebaseConfig = {
@@ -10,6 +12,7 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+    const auth = firebase.auth(); // ADD THIS LINE SO AUTH WORKS
 
     // declared a variable called email and asked it to get Item from the local store using the localStorage.getItem ("resetEmail")
     // FIXED: Now check if it's signup or forgot first
@@ -36,28 +39,47 @@ if(purpose === "signup"){
   }
   
   // if the otp inputed by the user corresponds to the one in the database the display an alert message saying OTP Verified! ✅
-  if(enteredOtp == realOTP){
+ if(enteredOtp == realOTP){
     alert("OTP Verified! ✅");
     // CREATE ACCOUNT IN FIREBASE HERE BEFORE REDIRECT
     try {
       const tempUser = JSON.parse(localStorage.getItem('tempUserData'));
-      // added check to prevent crash if tempUser is null
       if(!tempUser){ alert("No user data found. Go back to signup"); return; }
       
-      await db.collection("users").doc(tempUser.email).set(tempUser);
-      localStorage.removeItem('tempUserData'); // clear temp data
+
+      // STEP 2: NOW SAVE TO FIRESTORE WITH THE UID
+await db.collection("users").doc(tempUser.uid).set({
+         uid: tempUser.uid,
+        firstName: tempUser.firstName,
+        lastName: tempUser.lastName,
+        username: tempUser.username,
+        email: tempUser.email,
+        dob: tempUser.dob,
+        country: tempUser.country,
+        state: tempUser.state,
+        gender: tempUser.gender,
+        phone: tempUser.fullPhone,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        isVerified: true,
+        boomCredits: 0,
+        boomScore: 0
+      });
+      
+      localStorage.removeItem('tempUserData');
       localStorage.removeItem('generatedOTP');
       localStorage.removeItem('otpExpiry');
+      localStorage.removeItem('otpPurpose');
+      localStorage.removeItem('signupEmail');
       
       // takes the user to the dashboard after signup is complete
       window.location.href = "dashboard.html"; 
     } catch(error) {
-      alert("Error saving account: " + error.message);
+      alert("Error saving account: " + error.code + " - " + error.message);
     }
   } else {
     alert("Wrong OTP. Try again.");
   }
-  return; // THIS STOPS IT FROM RUNNING FIREBASE CODE BELOW
+  return; // STOP IT FROM RUNNING FORGOT CODE BELOW
 }
 // ===== END NEW CODE =====
 
@@ -173,3 +195,5 @@ function startCountdown(seconds) {
 
 // Start countdown automatically when page loads so they can't spam immediately
 startCountdown(30);
+
+}); // <-- THIS CLOSES THE DOMContentLoaded
