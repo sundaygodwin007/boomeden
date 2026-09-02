@@ -1,8 +1,17 @@
-// this listen to the even called DOMContentLoaded which means the HTML page is fully loaded and ready to be manipulated by JavaScript. It ensures that the code inside this function runs only after the page is ready.
+// this variable holds the Firestore database connection.
+// we declare it outside the functions so both the post loader and the like button can use it.
+let db;
+
+// this prevents a post from being liked twice while the first request is still running.
+const likeLock = new Set();
+
+// this runs only when the page is fully loaded.
+// after that, we can safely read the page and add content to it.
 document.addEventListener('DOMContentLoaded', () => {
 
 // FIREBASE SETUP
-// this is my real firebase keys, you can find them in your firebase project settings. This is necessary to connect to the Firebase database and use its features like authentication and Firestore.
+// these are the Firebase credentials for this project.
+// they connect this page to the Firebase database.
 const firebaseConfig = {
   apiKey: "AIzaSyD2dnVrNfzx8ktUT4s2ocJ5Q2-VhJR66A4",
   authDomain: "boomer-431e6.firebaseapp.com",
@@ -12,7 +21,8 @@ const firebaseConfig = {
   appId: "1:481343133195:web:ef20f718dd4ae4e574990e"
 };
 
-// this try-catch block attempts to initialize the Firebase app with the provided configuration. If it succeeds, it logs "FIREBASE INIT OK" to the console. If it fails (for example, if Firebase has already been initialized), it catches the error and logs "FIREBASE INIT ERROR" along with the error message.
+// this starts Firebase once.
+// if the app is already started, the catch block will handle that error.
 try {
   firebase.initializeApp(firebaseConfig);
   console.log("FIREBASE INIT OK"); // TEST 3
@@ -20,11 +30,11 @@ try {
   console.log("FIREBASE INIT ERROR:", e.message); // Will say "already exists" if double init
 }
 
-// this gets the Firestore database instance from the initialized Firebase app. It allows you to interact with the Firestore database, such as reading and writing data.
-const db = firebase.firestore();
+// this creates the Firestore database object we will use to read and write posts.
+db = firebase.firestore();
 
-// this selects the HTML element with the class "feed-container" and assigns it to the variable feedContainer. This is where the posts will be displayed on the page.
-// its also called the DOM manipulation which means changing the HTML page using JavaScript. The querySelector method is used to find the first element that matches the specified CSS selector.
+// this finds the place on the page where the posts will be shown.
+// this is the main feed container.
 const feedContainer = document.querySelector('.feed-container');
 
 // this function loadPosts() is responsible for fetching posts from the Firestore database and displaying them in the feedContainer. It logs the start of the process, retrieves the posts collection, and handles both success and error cases.
@@ -37,25 +47,42 @@ function loadPosts() {
     // this clears the inner HTML of the feedContainer, effectively removing any existing posts or content. This ensures that when new posts are loaded, they replace any old content rather than appending to it.
     feedContainer.innerHTML = ''; 
     
-    // this checks if the snapshot (the result of the Firestore query) is empty, meaning no posts were found in the "posts" collection. If it is empty, it sets the inner HTML of feedContainer to display a message indicating that no posts were found and returns early from the function.
+    // if there are no posts in Firestore, show a simple message to the user.
     if(snapshot.size === 0){
       // this sets the inner HTML of feedContainer to a paragraph element with padding and red text, informing the user that no posts were found in the "posts" collection. This provides feedback to the user when there are no posts to display.
       feedContainer.innerHTML = '<p style="padding:20px; color:red">No posts found in "posts" collection</p>';
       return;
     }
 
-    // this loops through each document in the snapshot (each post retrieved from Firestore). For each document, it extracts the post data and creates a new HTML card element to display the post's information, including image, category, title, description, and action buttons. Each card is then appended to the feedContainer.
+    // this loops through every post in the database one by one.
     snapshot.forEach(doc => {
 
-      // this retrieves the data of the current document (post) as a JavaScript object. The doc.data() method returns the fields of the document, allowing access to properties like title, description, imageUrl, and category.
-      const post = doc.data();
+  // this gets the post details from the database.
+  // we also save the document id so we can identify this post later.
+  const post = doc.data();
+  post.id = doc.id; // ADD THIS LINE
+
+
 
       // this logs the title of the post being loaded to the console. It helps in debugging and tracking which posts are being processed and displayed on the page.
       console.log("Loading post:", post.title);
       
-      // this creates a new div element to represent a post card. It sets the class name to "dashboard-card" and applies some margin styling. The inner HTML of the card is populated with the post's image, category, title, description, and action buttons (like, comment, retweet, share, bookmark). Finally, the card is appended to the feedContainer, making it visible on the page.
-      // this manipulates the DOM by creating new elements and inserting them into the existing HTML structure. It allows dynamic content to be displayed based on the data retrieved from Firestore.
+      // this creates one card box for this post.
+      // the card will hold the image, title, description, and actions.
       const card = document.createElement('div');
+
+      // this checks whether this specific post was liked before the page refreshed.
+      // we save the liked status in localStorage so the icon can stay red after a reload.
+      const isLikedSaved = localStorage.getItem(`liked-${post.id}`) === 'true';
+
+      // this keeps the count visible after refresh by restoring the last saved count.
+      // if no saved value exists, we fall back to the Firestore value.
+      const savedLikeCount = Number(localStorage.getItem(`like-count-${post.id}`));
+      const displayLikeCount = Number.isFinite(savedLikeCount) ? savedLikeCount : (post.likes || 0);
+
+      // these values decide whether the heart should be filled red or plain black on reload.
+      const likeIconClass = isLikedSaved ? 'fa-solid text-red-500' : 'fa-regular';
+      const likeIconColor = isLikedSaved ? 'red' : 'black';
 
       // this sets the class name of the newly created card div to "dashboard-card". This class can be used for styling the card with CSS, ensuring that all post cards have a consistent appearance.
       card.className = 'dashboard-card';
@@ -70,14 +97,35 @@ function loadPosts() {
         <div class="category">${post.category}</div>
         <h3>${post.title}</h3>
         <p>${post.description}</p>
-        <div class="post-actions">
-          <div class="post-action-btn"><i class="fa-regular fa-heart"></i> 0</div>
+        <div id="post-actions-${post.id}" style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:12px;">
+          <div class="post-action-btn" onclick="likePost('${post.id}')" style="display:flex; align-items:center; gap:6px">
+
+            <!-- this keeps the heart icon state after refresh by loading the saved liked status -->
+            <i class="fa-heart ${likeIconClass}" id="like-${post.id}" style="color:${likeIconColor};"></i> 
+
+            <!-- this restores the saved like count so the number still shows after refresh -->
+            <span id="like-count-${post.id}">${displayLikeCount}</span>
+          </div>
           <div class="post-action-btn"><i class="fa-regular fa-comment"></i> 0</div>
           <div class="post-action-btn"><i class="fa-solid fa-retweet"></i> 0</div>
           <div class="post-action-btn"><i class="fa-regular fa-share-from-square"></i></div>
           <div class="post-action-btn"><i class="fa-regular fa-bookmark"></i></div>
         </div>
       `;
+
+      // this lets the user tap on the image to like or unlike the post.
+      // this makes the image act like a like button too.
+      const postImage = card.querySelector('img');
+      postImage.style.cursor = 'pointer';
+      postImage.addEventListener('click', () => likePost(post.id));
+
+      // this keeps all action icons close together but still gives them a bit of breathing room.
+      const actionRow = card.querySelector(`#post-actions-${post.id}`);
+      actionRow.style.display = 'flex';
+      actionRow.style.alignItems = 'center';
+      actionRow.style.justifyContent = 'flex-start';
+      actionRow.style.gap = '10px';
+      actionRow.style.marginTop = '8px';
 
       // this appends the newly created card element to the feedContainer, making it part of the DOM and visible on the page. This allows users to see the post content that was dynamically loaded from Firestore.
       feedContainer.appendChild(card);
@@ -98,3 +146,89 @@ function loadPosts() {
 // this calls the loadPosts() function to initiate the process of fetching and displaying posts from Firestore when the DOM content is fully loaded. This ensures that the posts are loaded and displayed as soon as the page is ready for interaction.
 loadPosts();
 });
+
+
+
+// this function runs whenever the user clicks like.
+// it reads the logged-in user, checks the current likes, and updates the database.
+async function likePost(postId){
+  try {
+    // this stops a double tap or double click from sending the same like request twice.
+    if (likeLock.has(postId)) return;
+    likeLock.add(postId);
+
+    // read the logged-in user from the browser storage.
+    const userDataString = localStorage.getItem("boomedenUser");
+    if(!userDataString) return alert("Please login first");
+    
+    const userData = JSON.parse(userDataString);
+    const userId = userData.uid;
+
+    // this points to the exact post in Firestore.
+    const postRef = db.collection("ecosystem_posts").doc(postId);
+    const likeBtn = document.getElementById(`like-${postId}`);
+    const likeCount = document.getElementById(`like-count-${postId}`);
+
+    // get the current like count and the list of users who liked it.
+    const docSnap = await postRef.get();
+    let currentLikes = 0;
+    let likedBy = [];
+
+    if(docSnap.exists){
+      currentLikes = docSnap.data().likes || 0;
+      likedBy = docSnap.data().likedBy || [];
+    }
+
+    // check whether this logged-in user already liked this post.
+    const isLiked = likedBy.includes(userId);
+    
+    if(isLiked) {
+      // if already liked, remove the like.
+      // this makes the heart empty again.
+      currentLikes -= 1;
+      likedBy = likedBy.filter(id => id !== userId);
+      
+      await postRef.set({ likes: currentLikes, likedBy: likedBy }, {merge: true});
+
+      // this saves the false state so the heart goes back to normal after refresh.
+      localStorage.setItem(`liked-${postId}`, 'false');
+      // this saves the updated count so the number is still visible after reload.
+      localStorage.setItem(`like-count-${postId}`, currentLikes.toString());
+      
+      likeBtn.classList.remove("fa-solid", "text-red-500"); 
+      likeBtn.classList.add("fa-regular");
+      likeBtn.style.color = "black"; // for non-tailwind
+      
+      likeCount.innerText = currentLikes;
+    } else {
+      // if not liked yet, add the like.
+      // this fills the heart and increases the count.
+      currentLikes += 1;
+      likedBy.push(userId);
+      
+      await postRef.set({ likes: currentLikes, likedBy: likedBy }, {merge: true});
+
+      // this saves the true state so the heart stays filled after the page refreshes.
+      localStorage.setItem(`liked-${postId}`, 'true');
+      // this saves the updated count so the number remains on the screen after reload.
+      localStorage.setItem(`like-count-${postId}`, currentLikes.toString());
+      
+      likeBtn.classList.remove("fa-regular");
+      likeBtn.classList.add("fa-solid", "text-red-500");
+      likeBtn.style.color = "red"; // for non-tailwind
+      
+      likeCount.innerText = currentLikes;
+    }
+  } catch(err) {
+    alert("Like error: " + err.message)
+    console.log(err)
+  } finally {
+    // this releases the lock so the user can click again after the request finishes.
+    likeLock.delete(postId);
+  }
+}
+
+
+
+
+
