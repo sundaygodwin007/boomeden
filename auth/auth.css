@@ -1,0 +1,315 @@
+/* style for signup, login, forgot password, OTP */
+
+/* Base Styles for the Application */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* style for the body e.g adding background-color, positioning the items, e.t.c */
+body {
+  background: radial-gradient(circle at 20% 30%, #3b82f6 0%, #1e3a8a 60%, #0f172a 100%),
+              linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px; /* added so container no touch edge on mobile */
+}
+
+/* styles for the container, the white box where all the details are in */
+.container{
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 35px;
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  width: 90%;
+  max-width: 420px;
+}
+
+/* aligned the h1 in the container class and has the id of create-text to the center */
+.container #create-text{
+    text-align: center;
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 25px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* style for the heading of h2 only */
+h2 {
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 25px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* styles for the form groups */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.form-group input,
+.form-group select,input {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+/* Custom styling for dropdown select options so text is pure white on a solid dark-blue background */
+.form-group select option {
+  background-color: #1e3a8a;
+  color: #ffffff;
+  padding: 10px;
+}
+
+.form-group input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: #ffffff;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  outline: none;
+}
+
+/* ===== Style for the PHONE NUMBER ROW ===== */
+.phone-group {
+  display: flex;
+  gap: 10px; /* space between country code and number */
+  align-items: center;
+}
+
+.country-code {
+  width: 30%; /* country code box smaller */
+  min-width: 90px;
+  background: rgba(255, 255, 255, 0.22) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.phone-number {
+  width: 70%; /* phone number takes the rest */
+}
+
+/* style for the button */
+button {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow: 0 4px 15px rgba(29, 78, 216, 0.4);
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(29, 78, 216, 0.6);
+}
+
+#forgotPassword {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: none;
+  color: #ffffff;
+}
+
+#forgotPassword:hover {
+  background: rgba(255, 255, 255, 0.22);
+  box-shadow: none;
+}
+
+/* style for the link text */
+.link-text {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.link-text a {
+  color: #ffffff;
+  text-decoration: underline;
+  font-weight: 700;
+  transition: color 0.2s ease;
+}
+
+.link-text a:hover {
+  text-decoration: underline;
+  background: transparent;
+  color: #93c5fd;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* style for the verify.html header */
+.auth-container, .verify {
+  color: white;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 35px;
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  width: 90%;
+  max-width: 420px;
+}
+
+.auth-container input, .verify input {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+.auth-container h1, .verify h1 {
+  text-align: center;
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#otpInput{
+  width: 100%;
+  height: 2.3rem;
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  text-align: center;
+  letter-spacing: 4px;
+  font-weight: 600;
+}
+
+/* for the reset password page */
+.password {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 35px;
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  width: 90%;
+  max-width: 420px;
+}
+
+.password input {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.password, h1{
+  color: white;
+}
+
+.password p {
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.container center p {
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 12px 0 2px 0;
+  letter-spacing: 1px;
+}
+
+
+
+
+
+/* END OF THE DESKTOP/LARGE VIEW */
+
+
+
+
+
+
+
+
+/* ===== MOBILE RESPONSIVE ===== */
+/* if the width of the device is from 600px and below then it should display in this size */
+@media (max-width: 600px) {
+  .container, .auth-container, .verify, .password {
+    padding: 20px; /* smaller padding on phone */
+    width: 95%; /* take more of the screen */
+    border-radius: 12px;
+  }
+
+  /* style for the header 2 (h2) */
+  h2 {
+    font-size: 20px; /* smaller heading */
+    margin-bottom: 18px;
+  }
+
+  /* style for the form */
+  .form-group input,
+  .form-group select,
+  button {
+    padding: 11px; /* slightly smaller inputs/buttons */
+    font-size: 14px;
+  }
+
+
+  /* Make phone row stack on very small screens */
+  .phone-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .country-code, 
+  .phone-number {
+    width: 100%; /* full width when stacked */
+  }
+
+}

@@ -1,0 +1,54 @@
+/* ==========================================================================
+   INTERLOCK MOBILE STYLES (interlock_mobile.css)
+   ========================================================================== */
+@media (max-width: 768px) {
+  body {
+    background-color: #f8fafc;
+    overflow-y: auto;
+    height: auto;
+  }
+
+  .navbar { padding: 10px 16px; }
+  .nav-search { margin: 0 10px; }
+  .search-box { padding: 6px 10px; }
+  .search-box input { font-size: 0.8rem; }
+  .btn-signin { padding: 6px 12px; font-size: 0.75rem; }
+
+  .dashboard-container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 12px;
+    height: auto;
+    overflow: visible;
+  }
+
+  .sidebar-left, .sidebar-right { display: none !important; }
+
+  .scrollable-main {
+    height: auto;
+    overflow-y: visible;
+    padding-bottom: 90px;
+  }
+
+  .post-creator-card { padding: 12px; border-radius: 12px; }
+  .creator-footer { flex-direction: column; gap: 10px; align-items: stretch; }
+  .creator-tools { justify-content: space-between; }
+  .tool-btn { flex: 1; justify-content: center; padding: 8px 4px; font-size: 0.7rem; }
+  .btn-publish { width: 100%; padding: 10px; }
+
+  .story-rect-card { min-width: 95px; height: 140px; padding: 8px; }
+
+  .floating-bottom-nav {
+    bottom: 0; left: 0; transform: none; width: 100%; border-radius: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.4); 
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 8px 6px; justify-content: space-around; max-width: 100%;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .action-item { padding: 4px 6px; font-size: 0.6rem; }
+  .action-item i { font-size: 0.9rem; }
+}

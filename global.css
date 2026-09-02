@@ -1,0 +1,127 @@
+/* ===========================================
+   GLOBAL.CSS - BOOMEDEN
+   This file controls: Layout, Topbar, Sidebar, Slide System
+   Every page in the app will use this
+   =========================================== */
+
+/* 1. RESET + GLOBAL VARIABLES
+   We define all colors and sizes here once. Change here, it updates everywhere */
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+  font-family: 'Inter', sans-serif; 
+}
+
+:root {
+  /* Color Palette */
+  --bg: #050B18;           /* Main background - very dark blue */
+  --sidebar: #0A1122;      /* Sidebar background - slightly lighter */
+  --blue: #00A3FF;         /* Accent color for buttons and active states */
+  --text: #FFFFFF;         /* Main text color */
+  --muted: #8A94AD;        /* Muted text for labels */
+  
+  /* Layout Sizes */
+  --sidebar-w: 300px;      /* Desktop sidebar width */
+  --sidebar-mobile: 130px; /* Tablet/Mobile sidebar width */
+  --topbar-h: 65px;        /* Topbar height */
+}
+
+body { 
+  background: var(--bg); 
+  color: var(--text); 
+  overflow-x: hidden; /* Prevent horizontal scroll when page slides */
+}
+
+/* 2. TOPBAR 
+   Fixed at the top. Has 3 parts: Left Logo | Center Page Name | Right Avatar */
+.topbar { 
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  height: var(--topbar-h); 
+  background: #000; 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  padding: 0 25px; 
+  border-bottom: 1px solid #1A2540; 
+  z-index: 20; /* Must be above everything */
+}
+
+/* Center part: This is where "Command Center" changes to "← Skills" */
+.top-center { 
+  font-size: 18px; 
+  font-weight: 600; 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+}
+
+/* Back arrow button that appears when a page slides in */
+.back-btn { 
+  cursor: pointer; 
+  font-size: 22px; 
+  transition: 0.2s;
+}
+.back-btn:hover {
+  color: var(--blue);
+}
+
+/* 3. SIDEBAR 
+   Fixed on the left. Never collapses. Only shrinks on tablet */
+.sidebar { 
+  position: fixed; 
+  top: var(--topbar-h); /* Start below topbar */
+  left: 0; 
+  width: var(--sidebar-w); 
+  height: calc(100vh - var(--topbar-h)); /* Full height minus topbar */
+  background: var(--sidebar); 
+  padding: 25px 20px; 
+  border-right: 1px solid #1A2540; 
+  overflow-y: auto; /* Scroll if content is too long */
+  z-index: 10;
+}
+
+/* 4. SLIDE PAGE SYSTEM - THE MAGIC
+   This is a container we create with JS. 
+   It sits on top of the dashboard and slides in from the right */
+.page-slide { 
+  position: fixed;              /* Stick to viewport */
+  top: var(--topbar-h);         /* Start below topbar */
+  left: var(--sidebar-w);       /* Start from edge of sidebar */
+  right: 0; 
+  bottom: 0; 
+  background: var(--bg);        /* Same as body bg so it looks seamless */
+  transform: translateX(100%);  /* Start hidden: pushed 100% to the right */
+  transition: transform 0.35s ease; /* Animate the slide */
+  z-index: 15;                  /* Above dashboard, below topbar */
+  overflow-y: auto;             /* Scrollable content */
+  padding: 30px;                /* Inner spacing */
+}
+
+/* When we add .active class with JS, it slides into view */
+.page-slide.active { 
+  transform: translateX(0); /* Slide to normal position */
+}
+
+
+
+
+
+
+
+
+/* 5. RESPONSIVE - TABLET & MOBILE
+   At 1024px and below, sidebar shrinks to 130px */
+@media (max-width: 1024px) {
+  .sidebar { 
+    width: var(--sidebar-mobile); /* Shrink sidebar */
+  }
+  
+  /* Slide page must also start from smaller sidebar */
+  .page-slide { 
+    left: var(--sidebar-mobile); 
+  }
+}

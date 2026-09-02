@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./profile.css">
+  <title>Profile & Settings</title>
+  <style>
+
+  </style>
+</head>
+<body>
+  <div class="glass-card">
+    <button class="back-btn" onclick="window.location.href='../dashboard/dashboard.html'">← Back to Dashboard</button>
+
+    <!-- PROFILE HEADER -->
+    <div class="profile-header">
+      <img id="profileAvatar" src="../assets/avatar.png" alt="avatar">
+      <h1 id="profileName">Loading...</h1>
+      <p id="profileEmail">Loading...</p>
+    </div>
+
+    <!-- DROPDOWN 1: ACCOUNT SETTINGS -->
+    <div class="setting-dropdown">
+      <div class="setting-header">
+        <span>Account Settings</span>
+        <span class="arrow">▼</span>
+      </div>
+      <div class="setting-content">
+        <div class="setting-item">Edit Profile</div>
+        <div class="setting-item">Change Password</div>
+        <div class="setting-item">Email Preferences</div>
+      </div>
+    </div>
+
+    <!-- DROPDOWN 2: PRIVACY -->
+    <div class="setting-dropdown">
+      <div class="setting-header">
+        <span>Privacy</span>
+        <span class="arrow">▼</span>
+      </div>
+      <div class="setting-content">
+        <div class="setting-item">Who can see my profile</div>
+        <div class="setting-item">Blocked Users</div>
+        <div class="setting-item">Data & Storage</div>
+      </div>
+    </div>
+
+    <!-- DROPDOWN 3: NOTIFICATIONS -->
+    <div class="setting-dropdown">
+      <div class="setting-header">
+        <span>Notifications</span>
+        <span class="arrow">▼</span>
+      </div>
+      <div class="setting-content">
+        <div class="setting-item">Push Notifications</div>
+        <div class="setting-item">Email Notifications</div>
+        <div class="setting-item">Sound</div>
+      </div>
+    </div>
+
+    <!-- DROPDOWN 4: APPEARANCE -->
+    <div class="setting-dropdown">
+      <div class="setting-header">
+        <span>Appearance</span>
+        <span class="arrow">▼</span>
+      </div>
+      <div class="setting-content">
+        <div class="setting-item">Dark Mode</div>
+        <div class="setting-item">Font Size</div>
+        <div class="setting-item">Theme Color</div>
+      </div>
+    </div>
+
+    <!-- LOGOUT -->
+    <button id="logoutBtn">Logout</button>
+  </div>
+
+  <script type="module" src="profile.js"></script>
+  
+  <script>
+
+  </script>
+</body>
+</html>

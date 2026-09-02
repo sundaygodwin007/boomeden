@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- ONLY LOAD FIREBASE ONCE -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <link rel="stylesheet" href="./ecosystem.css">
+  <title>BooMeden Ecosystem</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="brand-group">
+      <div class="brand-logo">B</div>
+      <span class="brand-name">BooMeden</span>
+    </div>
+
+<nav class="header-nav">
+  <a href="#" class="active"><span>Ecosystem</span></a>
+  <a href="#"><span>Interlock</span></a>
+  <a href="#"><span>AI Studio</span></a>
+  <a href="#"><span>TV</span></a>
+  <a href="#"><span>Fund</span></a>
+  <a href="#"><span>SkillHub</span></a>
+</nav>
+</nav>
+    </nav>
+
+<div class="header-actions">
+  <div class="search-container" id="search-container">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" id="search-input" placeholder="Search ecosystem..." />
+    <div id="search-results" style="display: none; position: absolute; background: white; width: 300px; border: 1px solid #ddd; z-index: 999;"></div>
+  </div>
+
+<!-- ADD THIS INSIDE header > .header-actions, after search-container -->
+<div class="profile-top-right" onclick="window.location.href='profile.html'">
+  <img id="profilePic" src="https://i.imgur.com/placeholder-avatar.png" alt="profile">
+</div>
+
+
+</div>
+    
+    <!-- THIS IS WHERE RESULTS WILL APPEAR -->
+    <div id="search-results" class="search-dropdown" style="display: none;"></div>
+  </div>
+</div>
+  </header>
+
+  <!-- Main Application Body Container -->
+  <div class="app-layout">
+
+    <!-- Left Column: Fixed Sidebar -->
+    <aside class="sidebar-column">
+      <div class="dashboard-card sidebar-card">
+        <div class="user-profile-widget">
+          <div class="user-avatar-badge">GO</div>
+          <span class="user-welcome">Welcome back</span>
+          <h2 class="user-handle">@godwin9</h2>
+          <a href="#" class="profile-link">View profile <i class="fa-solid fa-arrow-right" style="font-size: 10px;"></i></a>
+        </div>
+
+        <div>
+          <div class="section-title">Navigation Hub</div>
+          <div class="modules-nav">
+            <a href="#" class="action-item active"><i class="fa-solid fa-globe"></i><span>Ecosystem</span></a>
+            <a href="#" class="action-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
+            <a href="#" class="action-item"><i class="fa-solid fa-rotate"></i><span>Loops</span></a>
+            <a href="#" class="action-item"><i class="fa-regular fa-comment"></i><span>Chat</span></a>
+            <a href="#" class="action-item ai-glow"><i class="fa-solid fa-wand-magic-sparkles"></i><span>BooM AI</span></a>
+            <a href="#" class="action-item"><i class="fa-solid fa-store"></i><span>Market</span></a>
+            <a href="#" class="action-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
+            <a href="#" class="action-item"><i class="fa-solid fa-users"></i><span>skillhub</span></a>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Center Column: Scrollable Main Content -->
+    <main class="scrollable-main">
+      <!-- Ecosystem Pulse (Clickable Cards) -->
+      <div class="dashboard-card" style="margin-bottom: 20px;">
+        <div class="pulse-header">
+          <span class="section-title" style="margin: 0;">Ecosystem Pulse</span>
+          <div class="live-indicator">
+            <span class="live-dot"></span> LIVE
+          </div>
+        </div>
+        <div class="pulse-grid">
+          <div class="pulse-item action-item">
+            <i class="fa-solid fa-link pulse-icon"></i>
+            <div class="pulse-content ">
+              <h4 >Interlock</h4>
+              <p>14 active deals</p>
+            </div>
+          </div>
+          <div class="pulse-item action-item">
+            <i class="fa-solid fa-robot pulse-icon"></i>
+            <div class="pulse-content">
+              <h4>AI Studio</h4>
+              <p>8 ideas ready</p>
+            </div>
+          </div>
+          <div class="pulse-item action-item">
+            <i class="fa-solid fa-wallet pulse-icon"></i>
+            <div class="pulse-content">
+              <h4>Creator Fund</h4>
+              <p>₦3.1M paid</p>
+            </div>
+          </div>
+          <div class="pulse-item action-item">
+            <i class="fa-solid fa-graduation-cap pulse-icon"></i>
+            <div class="pulse-content">
+              <h4>SkillHub</h4>
+              <p>2 new classes</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feed Stream -->
+      <div>
+       <h3 class="feed-heading">Discover what's happening</h3>
+
+<!-- THIS IS WHERE FIRESTORE POSTS WILL LOAD -->
+<div class="feed-container"></div>
+
+<!-- DELETE ALL THE HARD-CODED dashboard-card posts below this -->
+    </main>
+
+    <!-- Right Column: Fixed Sidebar -->
+    <aside class="sidebar-column">
+      <!-- Enlarged BooM TV Promo Banner -->
+      <div class="dashboard-card promo-banner ">
+        <span class="section-title">Create & Watch</span>
+        <h3>BooM TV</h3>
+        <p>Launch your creator channel. Publish shows, clips, and stream live directly to your audience.</p>
+        <button class="btn-main">Start Channel</button>
+      </div>
+
+      <!-- Quick Directory occupying the remaining card height nicely -->
+      <div class="dashboard-card directory-card">
+        <span class="section-title">Quick Directory</span>
+        <div class="modules-nav">
+          <a href="#" class="action-item"><i class="fa-solid fa-user-group"></i><span>Community</span></a>
+          <a href="#" class="action-item"><i class="fa-solid fa-tower-broadcast"></i><span>Live Rooms</span></a>
+          <a href="#" class="action-item"><i class="fa-solid fa-calendar-days"></i><span>Events</span></a>
+          <a href="#" class="action-item"><i class="fa-solid fa-chart-line"></i><span>Analytics</span></a>
+          <a href="#" class="action-item"><i class="fa-solid fa-chart-pie"></i><span>Dashboard</span></a>
+          <a href="#" class="action-item"><i class="fa-solid fa-briefcase"></i><span>Brand Directory</span></a>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+<script src="./ecosystem.js"></script>
+<script src="./ecosystem-post.js"></script> 
+<script src="ecosystem-search.js"></script> 
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</body>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BooMeden Ecosystem - Interlock</title>
+  <link rel="stylesheet" href="interlock_desktop.css">
+  <link rel="stylesheet" media="screen and (max-width: 768px)" href="interlock_mobile.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-left">
+      <div class="brand">
+        <span class="logo-icon"><i class="fa-solid fa-atom"></i></span>
+        <span class="logo-text">BOOMEDEN</span>
+      </div>
+    </div>
+
+    <div class="nav-search">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="Search across BooMeden...">
+      </div>
+    </div>
+
+    <div class="nav-right">
+      <button class="btn-signin">Sign In</button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="dashboard-container">
+
+    <!-- Left Sidebar (Fixed) -->
+    <aside class="sidebar-left">
+      <div class="card profile-card-mini">
+        <div class="avatar-small">
+          <i class="fa-solid fa-cube"></i>
+        </div>
+        <div class="profile-info">
+          <span class="welcome-text">Welcome to</span>
+          <h3 class="username">BooMeden</h3>
+          <a href="#" class="profile-link">Sign In to personalize</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <span class="section-label">ECOSYSTEM</span>
+        <ul class="side-menu">
+          <li><a href="#" class="active"><i class="fa-solid fa-house"></i> Home Feed</a></li>
+          <li><a href="#"><i class="fa-solid fa-newspaper"></i> News</a></li>
+          <li><a href="#"><i class="fa-solid fa-fire"></i> Trending</a></li>
+          <li><a href="#"><i class="fa-solid fa-store"></i> MarketHub</a></li>
+          <li><a href="../dashboard/dashboard.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-group">
+        <span class="section-label">COMMUNITY</span>
+        <ul class="side-menu">
+          <li><a href="#"><i class="fa-solid fa-flag"></i> Pages</a></li>
+          <li><a href="#"><i class="fa-solid fa-tv"></i> Channels</a></li>
+          <li><a href="#"><i class="fa-solid fa-users-rectangle"></i> Groups</a></li>
+          <li><a href="#"><i class="fa-solid fa-users"></i> Community</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content Area (Scrollable Middle Panel) -->
+    <main class="main-content scrollable-main">
+      
+      <!-- Mature "Share Your Thoughts" Card -->
+      <div class="card post-creator-card">
+        <div class="creator-top">
+          <div class="feed-user-avatar"><i class="fa-solid fa-user"></i></div>
+          <textarea placeholder="What's cooking in your workflow, Godwin?" rows="2" class="creator-textarea"></textarea>
+        </div>
+        <div class="creator-footer">
+          <div class="creator-tools">
+            <button class="tool-btn"><i class="fa-regular fa-image" style="color: #10b981;"></i> Media</button>
+            <button class="tool-btn"><i class="fa-solid fa-tag" style="color: #3b82f6;"></i> Tag Project</button>
+            <button class="tool-btn"><i class="fa-regular fa-face-smile" style="color: #f59e0b;"></i> Feeling</button>
+          </div>
+          <button class="btn-publish">Post Update</button>
+        </div>
+      </div>
+
+      <!-- Rectangular Stories Cards Carousel -->
+      <div class="stories-wrapper">
+        <div class="story-rect-card create-story-card">
+          <div class="create-story-icon"><i class="fa-solid fa-plus"></i></div>
+          <span>Create Story</span>
+        </div>
+        <div class="story-rect-card">
+          <div class="story-user-badge">TO</div>
+          <div class="story-author-name">Tolu Creator</div>
+        </div>
+        <div class="story-rect-card">
+          <div class="story-user-badge">AL</div>
+          <div class="story-author-name">Ada Lovelace</div>
+        </div>
+        <div class="story-rect-card">
+          <div class="story-user-badge">TD</div>
+          <div class="story-author-name">Tesla Dev</div>
+        </div>
+      </div>
+
+      <!-- Ecosystem Feed Post 1 -->
+      <div class="card feed-card">
+        <div class="feed-header">
+          <div class="feed-user-avatar"><i class="fa-solid fa-user"></i></div>
+          <div class="feed-user-details">
+            <strong>Suday Godwin <i class="fa-solid fa-circle-check verified"></i></strong>
+            <span class="feed-time">2 hours ago • Posted in <strong>Interlock</strong></span>
+          </div>
+        </div>
+        
+        <p class="feed-content">
+          Just launched our brand new digital asset showcase in MarketHub! 🚀
+        </p>
+
+        <div class="media-preview-box">
+          <i class="fa-regular fa-image"></i>
+          <span>Media Content Preview</span>
+        </div>
+      </div>
+
+      <!-- Ecosystem Feed Post 2 -->
+      <div class="card feed-card">
+        <div class="feed-header">
+          <div class="feed-user-avatar"><i class="fa-solid fa-user"></i></div>
+          <div class="feed-user-details">
+            <strong>Ada Lovelace <i class="fa-solid fa-circle-check verified"></i></strong>
+            <span class="feed-time">5 hours ago • Posted in <strong>AI Studio</strong></span>
+          </div>
+        </div>
+        
+        <p class="feed-content">
+          Built an automated content creation pipeline using BooM AI. The speed is unbelievable. ✨
+        </p>
+
+        <div class="media-preview-box">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <span>AI Generated Workflow Preview</span>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Right Sidebar (Fixed Widgets) -->
+    <aside class="sidebar-right">
+      <div class="card widget-card">
+        <div class="widget-header">
+          <span class="section-label"><i class="fa-solid fa-chart-line"></i> Trending Now</span>
+          <a href="#" class="see-all">See all</a>
+        </div>
+        <ul class="widget-list">
+          <li>
+            <strong>#BooMedenLaunch</strong>
+            <p>12.4k posts</p>
+          </li>
+          <li>
+            <strong>#MarketHubDeals</strong>
+            <p>8.1k posts</p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card widget-card">
+        <div class="widget-header">
+          <span class="section-label"><i class="fa-solid fa-user-plus"></i> Suggested Friends</span>
+          <a href="#" class="see-all">See all</a>
+        </div>
+        <ul class="widget-user-list">
+          <li>
+            <div class="user-meta">
+              <div class="mini-avatar">AL</div>
+              <div class="user-info-text">
+                <strong>Ada Lovelace</strong>
+                <p>32 mutual friends</p>
+              </div>
+            </div>
+            <button class="btn-follow">Follow</button>
+          </li>
+          <li>
+            <div class="user-meta">
+              <div class="mini-avatar">TD</div>
+              <div class="user-info-text">
+                <strong>Tesla Dev</strong>
+                <p>18 mutual friends</p>
+              </div>
+            </div>
+            <button class="btn-follow">Follow</button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card widget-card">
+        <div class="widget-header">
+          <span class="section-label"><i class="fa-solid fa-flag"></i> Suggested Pages</span>
+          <a href="#" class="see-all">See all</a>
+        </div>
+        <ul class="widget-user-list">
+          <li>
+            <div class="user-meta">
+              <div class="mini-avatar page-avatar"><i class="fa-solid fa-cube"></i></div>
+              <div class="user-info-text">
+                <strong>BooMeden Official</strong>
+                <p>Technology • 45k</p>
+              </div>
+            </div>
+            <button class="btn-follow">Like</button>
+          </li>
+          <li>
+            <div class="user-meta">
+              <div class="mini-avatar page-avatar"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+              <div class="user-info-text">
+                <strong>AI Workflow Labs</strong>
+                <p>Software • 12k</p>
+              </div>
+            </div>
+            <button class="btn-follow">Like</button>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Polished Floating Glass Bottom Navigation Bar -->
+  <nav class="floating-bottom-nav">
+    <a href="#" class="action-item active"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="#" class="action-item"><i class="fa-solid fa-rotate"></i><span>Loops</span></a>
+    <a href="#" class="action-item"><i class="fa-regular fa-comment-dots"></i><span>Chat</span></a>
+    <a href="#" class="action-item ai-glow"><i class="fa-solid fa-wand-magic-sparkles"></i><span>BooM AI</span></a>
+    <a href="#" class="action-item"><i class="fa-solid fa-store"></i><span>Market</span></a>
+    <a href="#" class="action-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
+    <a href="#" class="action-item"><i class="fa-solid fa-users"></i><span>SkillHub</span></a>
+  </nav>
+
+</body>
+</html>
