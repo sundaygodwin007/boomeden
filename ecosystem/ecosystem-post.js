@@ -102,6 +102,11 @@ function loadPosts() {
         <div class="category">${post.category}</div>
         <h3>${post.title}</h3>
         <p>${post.description}</p>
+        <!-- this button opens the matching post in the Interlock area before the action icons. -->
+        <button class="view-interlock-btn" type="button" onclick="window.location.href='../interlock/interlock.html'" aria-label="View this post in Interlock">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          <span>View in Interlock</span>
+        </button>
         <!-- this row contains only the action buttons so the comment box cannot push the other icons down. -->
         <div id="post-actions-${post.id}" style="display:flex; align-items:center; justify-content:flex-start; gap:10px; margin-top:12px;">
           <div class="post-action-btn" onclick="likePost('${post.id}')" style="display:flex; align-items:center; gap:6px">

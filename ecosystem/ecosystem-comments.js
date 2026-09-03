@@ -31,8 +31,8 @@ async function loadComments(postId){
       return;
     }
     
-    // this loops through each comment and adds it to the page
-    snapshot.forEach(doc => {
+    // this shows only the first two comments inside the post card.
+    snapshot.docs.slice(0, 2).forEach(doc => {
       const comment = doc.data();
       const commentEl = document.createElement('div');
       commentEl.style.padding = '8px';
@@ -44,9 +44,76 @@ async function loadComments(postId){
       `;
       commentsContainer.appendChild(commentEl);
     });
+
+    // this adds a button only when the post has more than two comments.
+    if(snapshot.size > 2){
+      const viewMoreButton = document.createElement('button');
+      viewMoreButton.innerText = 'View more comments';
+      viewMoreButton.style.cssText = 'margin:12px 0 2px; padding:9px 14px; border:1px solid #d7dee8; border-radius:7px; background:white; color:#1d4ed8; font-weight:600; cursor:pointer;';
+      // this changes the text and border color while the pointer is over the button.
+      viewMoreButton.addEventListener('mouseenter', () => {
+        viewMoreButton.style.color = '#1e40af';
+        viewMoreButton.style.borderColor = '#93c5fd';
+        viewMoreButton.style.backgroundColor = '#eff6ff';
+      });
+      // this returns the button to its normal style when the pointer leaves it.
+      viewMoreButton.addEventListener('mouseleave', () => {
+        viewMoreButton.style.color = '#1d4ed8';
+        viewMoreButton.style.borderColor = '#d7dee8';
+        viewMoreButton.style.backgroundColor = 'white';
+      });
+      viewMoreButton.addEventListener('click', () => openCommentsModal(postId));
+      commentsContainer.appendChild(viewMoreButton);
+    }
   } catch(err){
     console.log("COMMENT LOAD ERROR:", err.message);
     commentsContainer.innerHTML = `<p style="color:red;">Error loading comments</p>`;
+  }
+}
+
+// this creates a modal that displays every comment without making the post card too tall.
+async function openCommentsModal(postId){
+  let modal = document.getElementById('all-comments-modal');
+
+  // this creates the modal once and reuses it for every post.
+  if(!modal){
+    modal = document.createElement('div');
+    modal.id = 'all-comments-modal';
+    modal.style.cssText = 'display:none; position:fixed; inset:0; z-index:1000; background:rgba(0,0,0,0.55); padding:24px;';
+    modal.innerHTML = `
+      <div style="max-width:560px; max-height:80vh; overflow:auto; margin:5vh auto; padding:20px; border-radius:10px; background:white;">
+        <button id="close-comments-modal" style="float:right; border:0; background:transparent; font-size:22px; cursor:pointer;">&times;</button>
+        <h3>All comments</h3>
+        <div id="all-comments-list"></div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    document.getElementById('close-comments-modal').addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+  }
+
+  const allCommentsList = document.getElementById('all-comments-list');
+  allCommentsList.innerHTML = '<p>Loading comments...</p>';
+  modal.style.display = 'block';
+
+  try {
+    // this gets every comment for the selected post for the modal view.
+    const snapshot = await db.collection('ecosystem_posts').doc(postId).collection('comments').orderBy('createdAt', 'desc').get();
+    allCommentsList.innerHTML = '';
+
+    // this places every comment inside the modal instead of the small post preview.
+    snapshot.forEach(doc => {
+      const comment = doc.data();
+      const commentEl = document.createElement('div');
+      commentEl.style.cssText = 'padding:10px 0; border-bottom:1px solid #eee;';
+      commentEl.innerHTML = `<strong>${comment.username || 'User'}</strong><p style="margin:4px 0;">${comment.text}</p>`;
+      allCommentsList.appendChild(commentEl);
+    });
+  } catch(err){
+    // this shows a useful message if the full comment list cannot be loaded.
+    allCommentsList.innerHTML = '<p style="color:red;">Error loading comments</p>';
+    console.log("ALL COMMENTS ERROR:", err.message);
   }
 }
 
@@ -107,6 +174,8 @@ window.toggleComments = toggleComments;
 window.postComment = postComment;
 // this makes the count function available to the post renderer.
 window.loadCommentCount = loadCommentCount;
+// this makes the full comments modal available to the preview button.
+window.openCommentsModal = openCommentsModal;
 
 
 
