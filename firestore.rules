@@ -17,5 +17,29 @@ service cloud.firestore {
       allow get: if request.auth != null && request.auth.token.email == email;
       allow delete: if false;
     }
+
+    // Users can read posts so the ecosystem feed and comment counts can load.
+    match /ecosystem_posts/{postId} {
+      allow read: if true;
+
+      // Logged-in users can update only like-related fields on an existing post.
+      allow update: if request.auth != null
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['likes', 'likedBy']);
+
+      // Users can read comments and the comment count for each post.
+      match /comments/{commentId} {
+        allow read: if true;
+
+        // A comment must belong to the signed-in user who created it.
+        allow create: if request.auth != null
+          && request.resource.data.userId == request.auth.uid
+          && request.resource.data.text is string
+          && request.resource.data.username is string;
+
+        // Comments cannot be edited or deleted by the client.
+        allow update, delete: if false;
+      }
+    }
   }
 }

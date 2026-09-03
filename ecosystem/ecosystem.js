@@ -6,6 +6,12 @@
 // ===============================================
 document.addEventListener('DOMContentLoaded', () => {
 // ===============================================
+// IF ANYTHING BREAKS, CHECK THIS SECTION FIRST.
+// IF A BUTTON DOES NOT NAVIGATE, CHECK:
+// 1) the route names match the text in HTML exactly
+// 2) the selector '.action-item' is finding the correct cards
+// 3) the DOM is loaded before the script runs
+// ===============================================
 // SECTION 2: COLLECT ALL THE TOOLS WE NEED
 // LINES: 2 - 3
 // WHAT IT DOES: Grab buttons and search box from HTML and put them in variables
@@ -15,6 +21,12 @@ const doorCards = document.querySelectorAll('.action-item'); // Gets ALL doors: 
 const searchInput = document.querySelector('.search-container input'); // Gets top search bar
 const topNavLinks = document.querySelectorAll('.header-nav a'); // NEW: Grab top nav links too
 
+// ===============================================
+// IF ANYTHING BREAKS, CHECK THIS ROUTING MAP.
+// IF THE PAGE DOES NOT MOVE TO ANOTHER PAGE, CHECK THAT:
+// 1) the route key matches the text in the HTML exactly
+// 2) the target path exists in the project
+// 3) the button text is not different in case or spacing
 // ===============================================
 // SECTION 3: THE BRAIN - ROUTING MAP
 // LINES: 4 - 18
@@ -94,6 +106,12 @@ doorCards.forEach(card => {
   });
 });
 
+// ===============================================
+// IF THE SEARCH BOX BREAKS, CHECK THIS SECTION.
+// IF THE INPUT DOES NOT RESPOND, CHECK:
+// 1) the search input exists in the HTML
+// 2) the event listener is attached after DOMContentLoaded
+// 3) the search box has been loaded before this script fires
 // ===============================================
 // SECTION 5: SEARCH BAR LOGIC
 // LINES: 57 - 68

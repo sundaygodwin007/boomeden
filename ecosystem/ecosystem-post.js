@@ -1,9 +1,11 @@
+// IF ANYTHING BREAKS, CHECK THIS SECTION FIRST.
+// IF POSTS DO NOT SHOW OR LIKE DOES NOT WORK, CHECK:
+// 1) Firebase is initialized correctly
+// 2) the Firestore collection name matches the database collection
+// 3) the HTML element with class 'feed-container' exists on the page
 // this variable holds the Firestore database connection.
 // we declare it outside the functions so both the post loader and the like button can use it.
 let db;
-
-// this prevents a post from being liked twice while the first request is still running.
-const likeLock = new Set();
 
 // this runs only when the page is fully loaded.
 // after that, we can safely read the page and add content to it.
@@ -30,6 +32,8 @@ try {
   console.log("FIREBASE INIT ERROR:", e.message); // Will say "already exists" if double init
 }
 
+// IF POSTS DON'T LOAD, CHECK THIS LINE.
+// IF FIRESTORE RETURNS NOTHING, CHECK THE COLLECTION NAME AND THE DATABASE RULES.
 // this creates the Firestore database object we will use to read and write posts.
 db = firebase.firestore();
 
@@ -41,6 +45,7 @@ const feedContainer = document.querySelector('.feed-container');
 function loadPosts() {
 
   // this logs "FIREBASE LOAD POSTS START" to the console, indicating that the process of loading posts from Firestore has begun. This is useful for debugging and tracking the flow of the application.
+  // if images disappear, this collection must match the collection that stores imageUrl.
   db.collection('posts').get() // REMOVED orderBy for now
   .then(snapshot => {
     
@@ -57,12 +62,10 @@ function loadPosts() {
     // this loops through every post in the database one by one.
     snapshot.forEach(doc => {
 
-  // this gets the post details from the database.
-  // we also save the document id so we can identify this post later.
-  const post = doc.data();
-  post.id = doc.id; // ADD THIS LINE
-
-
+      // this gets the post details from the database.
+      // we also save the document id so we can identify this post later.
+      const post = doc.data();
+      post.id = doc.id; // ADD THIS LINE
 
       // this logs the title of the post being loaded to the console. It helps in debugging and tracking which posts are being processed and displayed on the page.
       console.log("Loading post:", post.title);
@@ -90,6 +93,8 @@ function loadPosts() {
       // this sets the bottom margin of the card to 20 pixels, providing spacing between consecutive post cards in the feed. This improves the visual layout and readability of the content.
       card.style.marginBottom = '20px';
 
+      // IF THE LIKE ICON DOES NOT CLICK OR DOES NOT MATCH THE STATE, CHECK THIS BLOCK.
+      // IF THE HTML IDS DO NOT MATCH THE CLICK HANDLER, THE BUTTON WILL NOT UPDATE.
       // this sets the inner HTML of the card to include the post's image, category, title, description, and action buttons. The image is displayed with a width of 100% and rounded corners. The category is shown in a div, followed by the title in an h3 element and the description in a paragraph. The action buttons are represented with icons for like, comment, retweet, share, and bookmark.
       card.innerHTML = `
         <img src="${post.imageUrl}" style="width:100%; border-radius:8px;">
@@ -97,7 +102,8 @@ function loadPosts() {
         <div class="category">${post.category}</div>
         <h3>${post.title}</h3>
         <p>${post.description}</p>
-        <div id="post-actions-${post.id}" style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:12px;">
+        <!-- this row contains only the action buttons so the comment box cannot push the other icons down. -->
+        <div id="post-actions-${post.id}" style="display:flex; align-items:center; justify-content:flex-start; gap:10px; margin-top:12px;">
           <div class="post-action-btn" onclick="likePost('${post.id}')" style="display:flex; align-items:center; gap:6px">
 
             <!-- this keeps the heart icon state after refresh by loading the saved liked status -->
@@ -106,13 +112,27 @@ function loadPosts() {
             <!-- this restores the saved like count so the number still shows after refresh -->
             <span id="like-count-${post.id}">${displayLikeCount}</span>
           </div>
-          <div class="post-action-btn"><i class="fa-regular fa-comment"></i> 0</div>
+          <div class="post-action-btn" onclick="toggleComments('${post.id}')" style="display:flex; align-items:center; gap:6px; cursor:pointer">
+            <i class="fa-regular fa-comment"></i>
+            <!-- this number shows how many comments belong to this post. -->
+            <span id="comment-count-${post.id}">0</span>
+          </div>
           <div class="post-action-btn"><i class="fa-solid fa-retweet"></i> 0</div>
           <div class="post-action-btn"><i class="fa-regular fa-share-from-square"></i></div>
           <div class="post-action-btn"><i class="fa-regular fa-bookmark"></i></div>
         </div>
+        <!-- this comment box is outside the action row so it cannot move the icons. -->
+        <div id="comments-${post.id}" style="display:none; margin-top:10px; border-top:1px solid #ddd; padding-top:10px;">
+          <div id="comments-list-${post.id}"></div>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <input type="text" id="comment-input-${post.id}" placeholder="Write a comment..." style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px;">
+            <button onclick="postComment('${post.id}')" style="padding:8px 12px; border:none; background:black; color:white; border-radius:6px; cursor:pointer;">Post</button>
+          </div>
+        </div>
       `;
 
+      // IF THE IMAGE DOES NOT LIKE OR UNLIKE, CHECK THIS SECTION.
+      // IF THE CLICK IS NOT BINDING, CHECK THE image selector and the post ID.
       // this lets the user tap on the image to like or unlike the post.
       // this makes the image act like a like button too.
       const postImage = card.querySelector('img');
@@ -129,6 +149,9 @@ function loadPosts() {
 
       // this appends the newly created card element to the feedContainer, making it part of the DOM and visible on the page. This allows users to see the post content that was dynamically loaded from Firestore.
       feedContainer.appendChild(card);
+
+      // this asks Firestore for the current number of comments after the comment-count element is on the page.
+      if (typeof loadCommentCount === 'function') loadCommentCount(post.id);
     });
   })
 
@@ -146,89 +169,3 @@ function loadPosts() {
 // this calls the loadPosts() function to initiate the process of fetching and displaying posts from Firestore when the DOM content is fully loaded. This ensures that the posts are loaded and displayed as soon as the page is ready for interaction.
 loadPosts();
 });
-
-
-
-// this function runs whenever the user clicks like.
-// it reads the logged-in user, checks the current likes, and updates the database.
-async function likePost(postId){
-  try {
-    // this stops a double tap or double click from sending the same like request twice.
-    if (likeLock.has(postId)) return;
-    likeLock.add(postId);
-
-    // read the logged-in user from the browser storage.
-    const userDataString = localStorage.getItem("boomedenUser");
-    if(!userDataString) return alert("Please login first");
-    
-    const userData = JSON.parse(userDataString);
-    const userId = userData.uid;
-
-    // this points to the exact post in Firestore.
-    const postRef = db.collection("ecosystem_posts").doc(postId);
-    const likeBtn = document.getElementById(`like-${postId}`);
-    const likeCount = document.getElementById(`like-count-${postId}`);
-
-    // get the current like count and the list of users who liked it.
-    const docSnap = await postRef.get();
-    let currentLikes = 0;
-    let likedBy = [];
-
-    if(docSnap.exists){
-      currentLikes = docSnap.data().likes || 0;
-      likedBy = docSnap.data().likedBy || [];
-    }
-
-    // check whether this logged-in user already liked this post.
-    const isLiked = likedBy.includes(userId);
-    
-    if(isLiked) {
-      // if already liked, remove the like.
-      // this makes the heart empty again.
-      currentLikes -= 1;
-      likedBy = likedBy.filter(id => id !== userId);
-      
-      await postRef.set({ likes: currentLikes, likedBy: likedBy }, {merge: true});
-
-      // this saves the false state so the heart goes back to normal after refresh.
-      localStorage.setItem(`liked-${postId}`, 'false');
-      // this saves the updated count so the number is still visible after reload.
-      localStorage.setItem(`like-count-${postId}`, currentLikes.toString());
-      
-      likeBtn.classList.remove("fa-solid", "text-red-500"); 
-      likeBtn.classList.add("fa-regular");
-      likeBtn.style.color = "black"; // for non-tailwind
-      
-      likeCount.innerText = currentLikes;
-    } else {
-      // if not liked yet, add the like.
-      // this fills the heart and increases the count.
-      currentLikes += 1;
-      likedBy.push(userId);
-      
-      await postRef.set({ likes: currentLikes, likedBy: likedBy }, {merge: true});
-
-      // this saves the true state so the heart stays filled after the page refreshes.
-      localStorage.setItem(`liked-${postId}`, 'true');
-      // this saves the updated count so the number remains on the screen after reload.
-      localStorage.setItem(`like-count-${postId}`, currentLikes.toString());
-      
-      likeBtn.classList.remove("fa-regular");
-      likeBtn.classList.add("fa-solid", "text-red-500");
-      likeBtn.style.color = "red"; // for non-tailwind
-      
-      likeCount.innerText = currentLikes;
-    }
-  } catch(err) {
-    alert("Like error: " + err.message)
-    console.log(err)
-  } finally {
-    // this releases the lock so the user can click again after the request finishes.
-    likeLock.delete(postId);
-  }
-}
-
-
-
-
-
