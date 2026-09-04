@@ -33,7 +33,10 @@ sendResetButton.addEventListener('click', async () => {
   sendResetButton.disabled = true;
   try {
     await auth.sendPasswordResetEmail(email, actionCodeSettings);
-    // this replaces auth/forgot.html with login.html immediately after Firebase accepts the email.
+    // this tells the user that Firebase sent the email and reminds them to check Spam before leaving the page.
+    alert('Password reset email sent to ' + email + '. Please check your inbox and Spam folder.');
+
+    // this replaces auth/forgot.html with login.html after the user dismisses the confirmation message.
     window.location.replace('login.html');
   } catch (error) {
     sendResetButton.disabled = false;
