@@ -82,14 +82,15 @@
     }
 
     /* Dashboard Layout Container */
+    /* this lets the dashboard cards use the complete width of the current screen. */
     .dashboard-container {
-      /* this gives the dashboard cards enough space to breathe on large monitors. */
-      max-width: 1600px;
+      max-width: none;
       margin: 0 auto;
-      padding: 32px 24px;
+      padding: 32px clamp(20px, 3vw, 64px);
       display: flex;
       flex-direction: column;
       gap: 24px;
+      width: 100%;
     }
 
     .page-title-row {

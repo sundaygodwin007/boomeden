@@ -193,13 +193,13 @@
 
 
     /* Main App Layout Grid */
-    /* this lets the ecosystem use a wide monitor like a real product workspace instead of staying in a small centered box. */
+    /* this lets the ecosystem occupy the full available screen while keeping every column readable. */
     .app-layout {
-      max-width: 1920px;
+      max-width: none;
       margin: 0 auto;
-      padding: 28px clamp(20px, 3vw, 48px);
+      padding: 28px clamp(20px, 3vw, 64px);
       display: grid;
-      grid-template-columns: minmax(250px, 280px) minmax(680px, 1fr) minmax(320px, 360px);
+      grid-template-columns: minmax(280px, 20vw) minmax(0, 1fr) minmax(340px, 25vw);
       gap: clamp(24px, 2.2vw, 36px);
       width: 100%;
       height: calc(100vh - 64px);
@@ -595,7 +595,7 @@
     /* this keeps all three ecosystem columns usable on medium desktop screens. */
     @media (max-width: 1200px) {
       .app-layout {
-        grid-template-columns: 220px minmax(560px, 1fr) 280px;
+        grid-template-columns: 220px minmax(0, 1fr) 280px;
         gap: 16px;
       }
 
@@ -611,7 +611,7 @@
     /* this gives a medium desktop enough room for the feed before the layout removes the side rails. */
     @media (min-width: 1201px) and (max-width: 1650px) {
       .app-layout {
-        grid-template-columns: 230px minmax(600px, 1fr) 290px;
+        grid-template-columns: 230px minmax(0, 1fr) 290px;
         gap: 22px;
       }
     }
