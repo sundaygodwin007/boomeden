@@ -1,0 +1,121 @@
+/* this styles the guest access popup so it feels like part of the app instead of a browser alert. */
+.guest-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.58);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* this keeps the popup readable on large screens and comfortable on phones. */
+.guest-gate-card {
+  position: relative;
+  width: min(100%, 430px);
+  padding: 34px 30px 30px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 18px;
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.24);
+  text-align: center;
+}
+
+/* this makes the close control easy to find without competing with the main actions. */
+.guest-gate-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 23px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.guest-gate-close:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.guest-gate-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 16px;
+  border-radius: 14px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.guest-gate-card h2 {
+  margin-bottom: 10px;
+  color: #0f172a;
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.guest-gate-card p {
+  margin-bottom: 24px;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.guest-gate-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.guest-gate-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.guest-gate-login {
+  border: 1px solid #cbd5e1;
+  color: #1e293b;
+  background: #ffffff;
+}
+
+.guest-gate-login:hover {
+  background: #f8fafc;
+}
+
+.guest-gate-signup {
+  color: #ffffff;
+  background: #2563eb;
+}
+
+.guest-gate-signup:hover {
+  background: #1d4ed8;
+}
+
+@media (max-width: 480px) {
+  /* this stacks the two actions when the popup is viewed on a narrow phone. */
+  .guest-gate-card {
+    padding: 32px 20px 22px;
+  }
+
+  .guest-gate-actions {
+    grid-template-columns: 1fr;
+  }
+}

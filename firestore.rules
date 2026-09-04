@@ -41,5 +41,16 @@ service cloud.firestore {
         allow update, delete: if false;
       }
     }
+
+    // This matches the collection used by the live ecosystem feed and its like buttons.
+    match /posts/{postId} {
+      // Visitors can read feed posts so the public ecosystem can load.
+      allow read: if true;
+
+      // Signed-in users can update only the two fields used to store likes.
+      allow update: if request.auth != null
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['likes', 'likedBy']);
+    }
   }
 }

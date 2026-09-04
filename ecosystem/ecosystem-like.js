@@ -17,7 +17,8 @@ async function likePost(postId){
     const userId = userData.uid;
 
     // this points to the exact post in Firestore.
-    const postRef = db.collection("ecosystem_posts").doc(postId);
+    // this uses the same post collection used by the feed loader.
+    const postRef = db.collection("posts").doc(postId);
     const likeBtn = document.getElementById(`like-${postId}`);
     const likeCount = document.getElementById(`like-count-${postId}`);
 
@@ -49,7 +50,7 @@ async function likePost(postId){
       localStorage.setItem(`liked-${postId}`, 'false');
       // this saves the updated count so the number is still visible after reload.
       localStorage.setItem(`like-count-${postId}`, currentLikes.toString());
-      
+
       likeBtn.classList.remove("fa-solid", "text-red-500"); 
       likeBtn.classList.add("fa-regular");
       likeBtn.style.color = "black"; // for non-tailwind
@@ -67,7 +68,7 @@ async function likePost(postId){
       localStorage.setItem(`liked-${postId}`, 'true');
       // this saves the updated count so the number remains on the screen after reload.
       localStorage.setItem(`like-count-${postId}`, currentLikes.toString());
-      
+
       likeBtn.classList.remove("fa-regular");
       likeBtn.classList.add("fa-solid", "text-red-500");
       likeBtn.style.color = "red"; // for non-tailwind

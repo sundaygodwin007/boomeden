@@ -37,6 +37,9 @@ try {
 // this creates the Firestore database object we will use to read and write posts.
 db = firebase.firestore();
 
+// this starts Firebase Auth on the page so Firestore requests include the current user's login token.
+const ecosystemAuth = firebase.auth();
+
 // this finds the place on the page where the posts will be shown.
 // this is the main feed container.
 const feedContainer = document.querySelector('.feed-container');
@@ -76,12 +79,12 @@ function loadPosts() {
 
       // this checks whether this specific post was liked before the page refreshed.
       // we save the liked status in localStorage so the icon can stay red after a reload.
-      const isLikedSaved = localStorage.getItem(`liked-${post.id}`) === 'true';
+      // Firestore remains the source of truth so one user's cache cannot affect another user.
+      const savedUser = JSON.parse(localStorage.getItem('boomedenUser') || 'null');
+      const isLikedSaved = Boolean(savedUser?.uid && (post.likedBy || []).includes(savedUser.uid));
 
-      // this keeps the count visible after refresh by restoring the last saved count.
-      // if no saved value exists, we fall back to the Firestore value.
-      const savedLikeCount = Number(localStorage.getItem(`like-count-${post.id}`));
-      const displayLikeCount = Number.isFinite(savedLikeCount) ? savedLikeCount : (post.likes || 0);
+      // this keeps the count visible after refresh by reading the same post document that receives new likes.
+      const displayLikeCount = post.likes || 0;
 
       // these values decide whether the heart should be filled red or plain black on reload.
       const likeIconClass = isLikedSaved ? 'fa-solid text-red-500' : 'fa-regular';

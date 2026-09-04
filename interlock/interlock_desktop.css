@@ -79,13 +79,14 @@ input, button, textarea {
 .btn-signin:hover { background-color: var(--accent-hover); }
 
 /* Dashboard Grid Layout */
+/* this allows the Interlock feed to use more of a wide monitor while keeping each column readable. */
 .dashboard-container {
   display: grid;
-  grid-template-columns: 260px minmax(0, 1fr) 310px;
-  gap: 20px;
-  max-width: 1400px;
+  grid-template-columns: minmax(230px, 260px) minmax(0, 1fr) minmax(280px, 310px);
+  gap: clamp(16px, 2vw, 24px);
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 20px clamp(16px, 2.5vw, 36px);
   width: 100%;
   height: calc(100vh - 65px);
   overflow: hidden;
@@ -214,8 +215,29 @@ input, button, textarea {
 .btn-follow:hover { background-color: #ddd6fe; }
 
 @media (max-width: 1200px) {
-  .dashboard-container { grid-template-columns: 240px minmax(0, 1fr); }
+  /* this removes the right widgets before the feed becomes too narrow on smaller laptops. */
+  .dashboard-container { grid-template-columns: 220px minmax(0, 1fr); }
   .sidebar-right { display: none; }
+}
+
+@media (max-width: 900px) {
+  /* this leaves the feed as the primary content once there is not enough room for a sidebar. */
+  .navbar {
+    gap: 12px;
+  }
+
+  .nav-search {
+    margin: 0;
+    max-width: none;
+  }
+
+  .dashboard-container {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sidebar-left {
+    display: none;
+  }
 }
 
 

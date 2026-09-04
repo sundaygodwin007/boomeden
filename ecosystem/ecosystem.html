@@ -7,8 +7,12 @@
   <!-- ONLY LOAD FIREBASE ONCE -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <!-- this loads Firebase Authentication so Firestore can identify the signed-in user on like requests. -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
   <link rel="stylesheet" href="./ecosystem.css">
+  <!-- this loads the shared popup design used when a guest selects a protected action. -->
+  <link rel="stylesheet" href="../guest-gate/guest-gate.css">
   <title>BooMeden Ecosystem</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
@@ -43,6 +47,12 @@
 <div class="profile-top-right" onclick="window.location.href='profile.html'">
   <img id="profilePic" src="https://i.imgur.com/placeholder-avatar.png" alt="profile">
 </div>
+
+<!-- this link is visible only to guests so signed-in users do not see a signup action. -->
+<a id="signupLink" class="signup-link" href="../auth/index.signup.html">Sign Up</a>
+
+<!-- this button stays in the header for guests so they can open the login flow after closing the popup. -->
+<a id="authBtn" class="signup-link auth-link" href="../auth/login.html">Sign In</a>
 
 
 </div>
@@ -163,19 +173,12 @@
 <!-- IF ANYTHING BREAKS, CHECK THIS SCRIPT ORDER FROM 102-106. -->
 <!-- IF LIKE BUTTONS DO NOT CLICK, CHECK THAT THE LIKE SCRIPT FILE PATH IS CORRECT AND THAT ecosystem-like.js LOADS AFTER ecosystem-post.js. -->
 <script src="./ecosystem.js"></script>
+<script src="./ecosystem-post.js"></script>
 <script src="ecosystem-search.js"></script> 
 <script src="./ecosystem-comments.js"></script>
-<script src="./ecosystem-post.js"></script> 
 <script src="./ecosystem-like.js"></script>
-
-
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
-
-
-
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<!-- this loads the shared guest popup after the page controls are available. -->
+<script src="../guest-gate/guest-gate.js"></script>
 </body>
 </body>
 </html>

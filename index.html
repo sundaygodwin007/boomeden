@@ -2,10 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="refresh" content="0; url=auth/index.signup.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Boomeden</title>
 </head>
 <body>
-  Redirecting to signup page...
+  <!-- this chooses the mobile or desktop starting page without forcing every visitor through signup. -->
+  <script>
+    const firstPage = window.innerWidth <= 768
+      ? 'interlock/interlock.html'
+      : 'ecosystem/ecosystem.html';
+
+    window.location.replace(firstPage);
+  </script>
 </body>
 </html>

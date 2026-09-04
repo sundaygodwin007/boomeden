@@ -6,6 +6,8 @@
   <title>BooMeden Ecosystem - Interlock</title>
   <link rel="stylesheet" href="interlock_desktop.css">
   <link rel="stylesheet" media="screen and (max-width: 768px)" href="interlock_mobile.css">
+  <!-- this loads the shared popup design used when a guest selects a protected action. -->
+  <link rel="stylesheet" href="../guest-gate/guest-gate.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -27,7 +29,7 @@
     </div>
 
     <div class="nav-right">
-      <button class="btn-signin">Sign In</button>
+      <button id="authBtn" class="btn-signin">Sign In</button>
     </div>
   </header>
 
@@ -240,6 +242,11 @@
     <a href="#" class="action-item"><i class="fa-solid fa-compass"></i><span>Explore</span></a>
     <a href="#" class="action-item"><i class="fa-solid fa-users"></i><span>SkillHub</span></a>
   </nav>
+
+  <!-- this loads the auth listener that hides the sign-in button after Firebase restores the session. -->
+  <script type="module" src="./interlock.js"></script>
+  <!-- this loads the shared guest popup after the page controls are available. -->
+  <script src="../guest-gate/guest-gate.js"></script>
 
 </body>
 </html>

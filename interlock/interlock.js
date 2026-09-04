@@ -45,7 +45,7 @@ const createPostBoxMobile = document.getElementById('createPostBoxMobile');
 const guestBannerMobile = document.getElementById('guestBannerMobile');
 
 // This line finds the top login button so we can change its text later.
-const authBtn = document.getElementById('authBtn');
+const authBtn = document.getElementById('authBtn') || document.querySelector('.btn-signin');
 
 // This line finds every item that should appear only after login.
 const loggedOnlyItems = document.querySelectorAll('.logged-only, .bottom-logged-only');
@@ -79,7 +79,9 @@ function updateGuestUi(user) {
   // This condition changes the top button text to Log Out if the user is signed in.
   if (authBtn) {
     // This line changes the button label based on the login state.
-    authBtn.textContent = isLoggedIn ? 'Log Out' : 'Log In';
+    // this hides the sign-in action after Firebase confirms that the user is logged in.
+    authBtn.style.display = isLoggedIn ? 'none' : 'inline-flex';
+    authBtn.textContent = 'Sign In';
   }
 }
 
@@ -103,8 +105,8 @@ onAuthStateChanged(auth, (user) => {
     updateGuestUi(user);
   } else {
     // This block runs when no user is logged in.
-    // It falls back to the saved session or guest UI.
-    updateGuestUi(fallbackUser);
+    // This line shows the guest UI after Firebase confirms that no user is signed in.
+    updateGuestUi(null);
   }
 });
 

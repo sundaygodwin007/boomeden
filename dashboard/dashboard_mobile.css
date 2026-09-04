@@ -1,6 +1,17 @@
 /* ==========================================================================
    INTERLOCK MOBILE STYLES (interlock_mobile.css)
    ========================================================================== */
+@media (max-width: 1024px) {
+  /* this keeps the dashboard header from crowding its links on medium screens. */
+  .glass-topbar {
+    padding-inline: 20px;
+  }
+
+  .topbar-links {
+    gap: 14px;
+  }
+}
+
 @media (max-width: 768px) {
   body {
     background-color: #f8fafc;
@@ -38,6 +49,25 @@
   .btn-publish { width: 100%; padding: 10px; }
 
   .story-rect-card { min-width: 95px; height: 140px; padding: 8px; }
+
+  /* this allows the dashboard header controls to wrap instead of overflowing on phones. */
+  .glass-topbar {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px 16px;
+  }
+
+  .topbar-links {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+    overflow-x: auto;
+  }
+
+  .topbar-links a {
+    white-space: nowrap;
+  }
 
   .floating-bottom-nav {
     bottom: 0; left: 0; transform: none; width: 100%; border-radius: 0;

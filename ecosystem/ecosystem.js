@@ -21,6 +21,17 @@ const doorCards = document.querySelectorAll('.action-item'); // Gets ALL doors: 
 const searchInput = document.querySelector('.search-container input'); // Gets top search bar
 const topNavLinks = document.querySelectorAll('.header-nav a'); // NEW: Grab top nav links too
 
+// this finds the signup link so it can be shown to guests and hidden for signed-in users.
+const signupLink = document.getElementById('signupLink');
+const authBtn = document.getElementById('authBtn');
+
+// this reads the same login record created by the login page.
+const savedUser = localStorage.getItem('boomedenUser');
+
+// this removes the signup action from the header while a user is signed in.
+if (signupLink) signupLink.style.display = savedUser ? 'none' : 'inline-flex';
+if (authBtn) authBtn.style.display = savedUser ? 'none' : 'inline-flex';
+
 // ===============================================
 // IF ANYTHING BREAKS, CHECK THIS ROUTING MAP.
 // IF THE PAGE DOES NOT MOVE TO ANOTHER PAGE, CHECK THAT:
