@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/", "destination": "/deployment/index.html" },
     { "source": "/ecosystem", "destination": "/ecosystem/ecosystem.html" },
     { "source": "/interlock", "destination": "/interlock/interlock.html" },
     { "source": "/(.*)", "destination": "/$1" }

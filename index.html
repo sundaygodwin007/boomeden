@@ -6,13 +6,10 @@
   <title>Boomeden</title>
 </head>
 <body>
-  <!-- this chooses the mobile or desktop starting page without forcing every visitor through signup. -->
+  <!-- this root shim points local visitors to deployment/index.html, where the responsive redirect is controlled. -->
   <script>
-    const firstPage = window.innerWidth <= 768
-      ? 'interlock/interlock.html'
-      : 'ecosystem/ecosystem.html';
-
-    window.location.replace(firstPage);
+    // if the local root page does not open, check that deployment/index.html still exists.
+    window.location.replace('deployment/index.html');
   </script>
 </body>
 </html>

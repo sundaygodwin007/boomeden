@@ -7,7 +7,12 @@ service cloud.firestore {
         && request.auth.uid == userId
         && request.resource.data.uid == userId
         && request.resource.data.email is string
-        && request.resource.data.isVerified is bool;
+        && request.resource.data.isVerified is bool
+        && request.resource.data.keys().hasOnly([
+          'uid', 'email', 'isVerified', 'firstName', 'lastName',
+          'username', 'dob', 'country', 'state', 'gender', 'phone',
+          'createdAt', 'boomCredits', 'boomScore'
+        ]);
       allow delete: if false;
     }
 
@@ -22,20 +27,15 @@ service cloud.firestore {
     match /ecosystem_posts/{postId} {
       allow read: if true;
 
-      // Logged-in users can update only like-related fields on an existing post.
-      allow update: if request.auth != null
-        && request.resource.data.diff(resource.data).affectedKeys()
-          .hasOnly(['likes', 'likedBy']);
+      // this collection is retired, so old documents stay readable but cannot be changed by the client.
+      allow update: if false;
 
       // Users can read comments and the comment count for each post.
       match /comments/{commentId} {
         allow read: if true;
 
-        // A comment must belong to the signed-in user who created it.
-        allow create: if request.auth != null
-          && request.resource.data.userId == request.auth.uid
-          && request.resource.data.text is string
-          && request.resource.data.username is string;
+        // this old comment path is retired, so new comments must use posts/{postId}/comments.
+        allow create: if false;
 
         // Comments cannot be edited or deleted by the client.
         allow update, delete: if false;
@@ -47,10 +47,33 @@ service cloud.firestore {
       // Visitors can read feed posts so the public ecosystem can load.
       allow read: if true;
 
-      // Signed-in users can update only the two fields used to store likes.
+      // Signed-in users can update only like fields and must add or remove their own user ID.
       allow update: if request.auth != null
         && request.resource.data.diff(resource.data).affectedKeys()
-          .hasOnly(['likes', 'likedBy']);
+          .hasOnly(['likes', 'likedBy'])
+        && request.resource.data.likes is int
+        && request.resource.data.likes >= 0
+        && request.resource.data.likedBy is list
+        && (
+          (request.resource.data.likes == resource.data.likes + 1
+            && request.resource.data.likedBy.hasAll([request.auth.uid])
+            && !resource.data.likedBy.hasAll([request.auth.uid]))
+          ||
+          (request.resource.data.likes == resource.data.likes - 1
+            && request.resource.data.likes >= 0
+            && resource.data.likedBy.hasAll([request.auth.uid])
+            && !request.resource.data.likedBy.hasAll([request.auth.uid]))
+        );
+
+      // Visitors can read comments, but only signed-in users can create their own comments.
+      match /comments/{commentId} {
+        allow read: if true;
+        allow create: if request.auth != null
+          && request.resource.data.userId == request.auth.uid
+          && request.resource.data.text is string
+          && request.resource.data.username is string;
+        allow update, delete: if false;
+      }
     }
   }
 }

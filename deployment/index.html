@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Boomeden</title>
+</head>
+<body>
+  <!-- this script controls the root entry page and redirects to the matching HTML page below. -->
+  <script>
+    // this checks the browser width so mobile visitors open Interlock and wide visitors open Ecosystem.
+    const firstPage = window.innerWidth <= 768
+      ? '/interlock/interlock.html'
+      : '/ecosystem/ecosystem.html';
+
+    // if the redirect fails, check the two destination paths above and the root rewrite in vercel.json.
+    window.location.replace(firstPage);
+  </script>
+</body>
+</html>

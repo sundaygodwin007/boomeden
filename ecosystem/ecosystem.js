@@ -21,14 +21,15 @@ const doorCards = document.querySelectorAll('.action-item'); // Gets ALL doors: 
 const searchInput = document.querySelector('.search-container input'); // Gets top search bar
 const topNavLinks = document.querySelectorAll('.header-nav a'); // NEW: Grab top nav links too
 
-// this finds the signup link so it can be shown to guests and hidden for signed-in users.
+// this finds #signupLink and #authBtn from ecosystem.html so their labels and visibility follow login state.
 const signupLink = document.getElementById('signupLink');
 const authBtn = document.getElementById('authBtn');
 
 // this reads the same login record created by the login page.
 const savedUser = localStorage.getItem('boomedenUser');
 
-// this keeps both auth actions available so a signed-in user can test logout immediately.
+// this keeps the Ecosystem header controls visible so a signed-in user can test logout immediately.
+// the actual Firebase logout click handler is connected in ecosystem-post.js after Firebase starts.
 if (signupLink) signupLink.style.display = savedUser ? 'none' : 'inline-flex';
 if (authBtn) {
   authBtn.style.display = 'inline-flex';

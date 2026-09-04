@@ -85,7 +85,7 @@ body {
 }
 
 /* 4. SLIDE PAGE SYSTEM - THE MAGIC
-   This is a container we create with JS. 
+  This is a container we create with JS. 
    It sits on top of the dashboard and slides in from the right */
 .page-slide { 
   position: fixed;              /* Stick to viewport */
@@ -105,13 +105,6 @@ body {
 .page-slide.active { 
   transform: translateX(0); /* Slide to normal position */
 }
-
-
-
-
-
-
-
 
 /* 5. RESPONSIVE - TABLET & MOBILE
    At 1024px and below, sidebar shrinks to 130px */

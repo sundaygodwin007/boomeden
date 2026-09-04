@@ -21,7 +21,7 @@ async function loadComments(postId){
 
   try {
     // this gets comments subcollection under each post
-    const snapshot = await db.collection('ecosystem_posts').doc(postId).collection('comments').orderBy('createdAt', 'desc').get();
+    const snapshot = await db.collection('posts').doc(postId).collection('comments').orderBy('createdAt', 'desc').get();
     
     commentsContainer.innerHTML = '';
     
@@ -99,7 +99,7 @@ async function openCommentsModal(postId){
 
   try {
     // this gets every comment for the selected post for the modal view.
-    const snapshot = await db.collection('ecosystem_posts').doc(postId).collection('comments').orderBy('createdAt', 'desc').get();
+    const snapshot = await db.collection('posts').doc(postId).collection('comments').orderBy('createdAt', 'desc').get();
     allCommentsList.innerHTML = '';
 
     // this places every comment inside the modal instead of the small post preview.
@@ -124,7 +124,7 @@ async function loadCommentCount(postId){
 
   try {
     // this reads the comments subcollection and counts the comments belonging to this post.
-    const snapshot = await db.collection('ecosystem_posts').doc(postId).collection('comments').get();
+    const snapshot = await db.collection('posts').doc(postId).collection('comments').get();
     commentCount.innerText = snapshot.size;
   } catch(err){
     // this leaves the count at zero if the comment count cannot be loaded.
@@ -147,7 +147,7 @@ async function postComment(postId){
   
   try {
     // this adds the comment to the subcollection 'comments' under the post
-    await db.collection('ecosystem_posts').doc(postId).collection('comments').add({
+    await db.collection('posts').doc(postId).collection('comments').add({
       text: text,
       userId: userData.uid,
       username: userData.name || 'Anonymous', // make sure you save name during signup

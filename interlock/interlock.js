@@ -44,7 +44,7 @@ const createPostBoxMobile = document.getElementById('createPostBoxMobile');
 // This line finds the mobile guest banner so the same logic works on phones.
 const guestBannerMobile = document.getElementById('guestBannerMobile');
 
-// This line finds the top login button so we can change its text later.
+// This line finds the #authBtn button from interlock.html so we can change it between Sign In and Log Out.
 const authBtn = document.getElementById('authBtn') || document.querySelector('.btn-signin');
 
 // This line finds every item that should appear only after login.

@@ -39,7 +39,11 @@
     });
   }
 
-  // this identifies buttons, links, modules, and feed actions that require an account.
+  // this identifies the HTML controls that require an account:
+  // #authBtn and #signupLink come from the page headers.
+  // .action-item, .side-menu a, and .nav-group a are the module navigation links.
+  // .post-action-btn and .view-interlock-btn are created by ecosystem-post.js inside each feed card.
+  // if one protected control stops opening the popup, check its class or ID in the matching HTML first.
   function isProtectedAction(target) {
     return target.closest([
       '#authBtn',
@@ -58,7 +62,8 @@
     ].join(','));
   }
 
-  // this runs before the existing page click handlers so guests see the popup instead of a broken route or like request.
+  // this listens on the document in capture mode, before the page's normal click handlers.
+  // if a guest action navigates instead of opening the popup, check this listener and isProtectedAction() above.
   document.addEventListener('click', (event) => {
     if (hasLoggedInUser()) return;
 

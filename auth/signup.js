@@ -193,6 +193,8 @@ try {
 
   // STEP 2: IF SUCCESS, CREATE TEMP DOC IN FIRESTORE
   await setDoc(doc(db, "users", user.uid), {
+    // this stores the Firebase user ID so the Firestore rule can verify ownership.
+    uid: user.uid,
     email: email,
     isVerified: false // will update to true after OTP
   });

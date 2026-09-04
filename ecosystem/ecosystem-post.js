@@ -40,7 +40,7 @@ db = firebase.firestore();
 // this starts Firebase Auth on the page so Firestore requests include the current user's login token.
 const ecosystemAuth = firebase.auth();
 
-// this connects the Ecosystem header button to the live Firebase login state.
+// this connects the #authBtn link from ecosystem.html to the live Firebase login state.
 const ecosystemAuthBtn = document.getElementById('authBtn');
 
 // this changes the button into a real logout control after Firebase confirms the user is signed in.
@@ -60,7 +60,7 @@ ecosystemAuth.onAuthStateChanged((user) => {
   }
 });
 
-// this signs the user out and reloads the page so the guest controls appear again.
+// this signs out the user who clicked #authBtn, then reloads ecosystem.html so guest controls appear again.
 if (ecosystemAuthBtn) {
   ecosystemAuthBtn.addEventListener('click', async (event) => {
     if (!firebase.auth().currentUser) return;

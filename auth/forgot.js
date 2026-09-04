@@ -10,7 +10,7 @@ const firebaseConfig = {
   appId: "1:481343133195:web:ef20f718dd4ae4e574990e"
 };
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const auth = firebase.auth();
 
 
 
@@ -39,39 +39,20 @@ document.getElementById('sendOtpBtn').onclick = function() {
     return; 
   }
   
-  // 1. Generate 6 digit OTP ONCE
-  // declared a variable called otp and used the javascript code called math.floor to generate a number below and also math.random to generate a random number
-  const otp = Math.floor(100000 + Math.random() * 900000);
-  console.log("Generated OTP: " + otp); // for testing
-  
-  // 2. Send Email FIRST using EmailJS
-  // i used the emailjs.send and also ( added the codes i got from emailjs inside the bracket) and then called the email and otp variables
-emailjs.send("service_oo5adci", "template_sh4mbi3", {
-    to_email: email,
-    otp_code: otp
-  }).then(() => {
-    
-    // 3. If email sent successfully, THEN save to Firebase
-    // this is to save the otp to the firebase with the date and time 
-    return db.collection("otps").doc(email).set({
-      code: otp,
-      createdAt: Date.now(),
-      expiresAt: Date.now() + 300000 // 5 mins
+  // this sends a secure reset link that returns the user to your own password page.
+  const actionCodeSettings = {
+    url: `${window.location.origin}/auth/resetpassword.html`,
+    handleCodeInApp: true
+  };
+
+  auth.sendPasswordResetEmail(email, actionCodeSettings)
+    .then(function() {
+      alert("Password reset link sent to " + email);
+      window.location.href = "login.html";
+    })
+    .catch(function(error) {
+      alert("Unable to send reset link: " + error.message);
     });
-
-    // after saving then perform this function
-  }).then(function() {
-    alert("OTP Sent to " + email);
-    localStorage.setItem("resetEmail", email); 
-    // I am leaving the older key commented out because the OTP page now uses otpPurpose + resetEmail, so this older storage key is no longer needed for this fix.
-    // localStorage.setItem("boomedOTP", otp); // for quick check 
-    localStorage.setItem("otpPurpose", "forgot");
-    window.location.href = "verifyOTP.html";
-
-    // if not successful perform this function
-  }).catch(function(error) {
-    alert("Error: " + error.message)
-  })
 
 }
 
