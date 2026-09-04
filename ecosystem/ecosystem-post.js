@@ -40,6 +40,36 @@ db = firebase.firestore();
 // this starts Firebase Auth on the page so Firestore requests include the current user's login token.
 const ecosystemAuth = firebase.auth();
 
+// this connects the Ecosystem header button to the live Firebase login state.
+const ecosystemAuthBtn = document.getElementById('authBtn');
+
+// this changes the button into a real logout control after Firebase confirms the user is signed in.
+ecosystemAuth.onAuthStateChanged((user) => {
+  if (user) {
+    localStorage.setItem('boomedenUser', JSON.stringify({ uid: user.uid, email: user.email }));
+    if (ecosystemAuthBtn) {
+      ecosystemAuthBtn.style.display = 'inline-flex';
+      ecosystemAuthBtn.textContent = 'Log Out';
+    }
+  } else {
+    localStorage.removeItem('boomedenUser');
+    if (ecosystemAuthBtn) {
+      ecosystemAuthBtn.style.display = 'inline-flex';
+      ecosystemAuthBtn.textContent = 'Sign In';
+    }
+  }
+});
+
+// this signs the user out and reloads the page so the guest controls appear again.
+if (ecosystemAuthBtn) {
+  ecosystemAuthBtn.addEventListener('click', async (event) => {
+    if (!firebase.auth().currentUser) return;
+    event.preventDefault();
+    await ecosystemAuth.signOut();
+    window.location.reload();
+  });
+}
+
 // this finds the place on the page where the posts will be shown.
 // this is the main feed container.
 const feedContainer = document.querySelector('.feed-container');

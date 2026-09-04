@@ -28,9 +28,12 @@ const authBtn = document.getElementById('authBtn');
 // this reads the same login record created by the login page.
 const savedUser = localStorage.getItem('boomedenUser');
 
-// this removes the signup action from the header while a user is signed in.
+// this keeps both auth actions available so a signed-in user can test logout immediately.
 if (signupLink) signupLink.style.display = savedUser ? 'none' : 'inline-flex';
-if (authBtn) authBtn.style.display = savedUser ? 'none' : 'inline-flex';
+if (authBtn) {
+  authBtn.style.display = 'inline-flex';
+  authBtn.textContent = savedUser ? 'Log Out' : 'Sign In';
+}
 
 // ===============================================
 // IF ANYTHING BREAKS, CHECK THIS ROUTING MAP.

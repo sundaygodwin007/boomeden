@@ -79,9 +79,9 @@ function updateGuestUi(user) {
   // This condition changes the top button text to Log Out if the user is signed in.
   if (authBtn) {
     // This line changes the button label based on the login state.
-    // this hides the sign-in action after Firebase confirms that the user is logged in.
-    authBtn.style.display = isLoggedIn ? 'none' : 'inline-flex';
-    authBtn.textContent = 'Sign In';
+    // this keeps the auth control visible so a signed-in user can log out and test the guest flow.
+    authBtn.style.display = 'inline-flex';
+    authBtn.textContent = isLoggedIn ? 'Log Out' : 'Sign In';
   }
 }
 
@@ -106,6 +106,7 @@ onAuthStateChanged(auth, (user) => {
   } else {
     // This block runs when no user is logged in.
     // This line shows the guest UI after Firebase confirms that no user is signed in.
+    localStorage.removeItem('boomedenUser');
     updateGuestUi(null);
   }
 });
