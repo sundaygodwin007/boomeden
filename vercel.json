@@ -1,7 +1,7 @@
 {
   "rewrites": [
-    { "source": "/ecosystem", "destination": "/auth/signup.html" },
-    { "source": "/interlock", "destination": "/auth/signup.html" },
+    { "source": "/ecosystem", "destination": "/ecosystem/ecosystem.html" },
+    { "source": "/interlock", "destination": "/interlock/interlock.html" },
     { "source": "/(.*)", "destination": "/$1" }
   ]
 }
