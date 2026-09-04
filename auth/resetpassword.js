@@ -1,6 +1,7 @@
 // this connects the custom password page to Firebase Auth's verified reset email code.
 const firebaseConfig = {
-  apiKey: "AIzaSyD2dnVrNfzx8ktUT4s2ocJQ5-VhJR66A4",
+  // this must match the Firebase config used by login.js and signup.js.
+  apiKey: "AIzaSyD2dnVrNfzx8ktUT4s2ocJ5Q2-VhJR66A4",
   authDomain: "boomer-431e6.firebaseapp.com",
   projectId: "boomer-431e6",
   storageBucket: "boomer-431e6.firebasestorage.app",
