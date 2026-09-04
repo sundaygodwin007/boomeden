@@ -33,7 +33,8 @@ sendResetButton.addEventListener('click', async () => {
   sendResetButton.disabled = true;
   try {
     await auth.sendPasswordResetEmail(email, actionCodeSettings);
-    alert('Password reset email sent. Open the link to choose a new password on BooMeden.');
+    // this replaces auth/forgot.html with login.html immediately after Firebase accepts the email.
+    window.location.replace('login.html');
   } catch (error) {
     sendResetButton.disabled = false;
     // this shows the Firebase error code so the matching Console setting can be found quickly.

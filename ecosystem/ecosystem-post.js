@@ -7,6 +7,12 @@
 // we declare it outside the functions so both the post loader and the like button can use it.
 let db;
 
+// ===============================================
+// PANEL 1: PAGE START + FIREBASE CONNECTION
+// HTML CONNECTION: ecosystem.html loads this file after the Firebase scripts.
+// IF THIS PANEL BREAKS: check the Firebase script order in ecosystem.html first.
+// ===============================================
+
 // this runs only when the page is fully loaded.
 // after that, we can safely read the page and add content to it.
 document.addEventListener('DOMContentLoaded', () => {
@@ -37,6 +43,12 @@ try {
 // this creates the Firestore database object we will use to read and write posts.
 db = firebase.firestore();
 
+// ===============================================
+// PANEL 2: USER PROFILE PANEL
+// HTML CONNECTION: #userHandle in ecosystem.html receives the logged-in user's name.
+// IF THIS PANEL BREAKS: check #userHandle and the users/{uid} Firestore document.
+// ===============================================
+
 // this starts Firebase Auth on the page so Firestore requests include the current user's login token.
 const ecosystemAuth = firebase.auth();
 
@@ -50,7 +62,7 @@ async function loadLoggedInUserName(user) {
   try {
     const userSnapshot = await db.collection('users').doc(user.uid).get();
     const profile = userSnapshot.exists ? userSnapshot.data() : {};
-    const displayName = profile.username || profile.firstName || user.email.split('@')[0];
+    // const displayName = profile.username || profile.firstName || user.email.split('@')[0];
     userHandle.textContent = `@${displayName}`;
   } catch (error) {
     // if the profile read fails, the email prefix still gives the user a useful label.
@@ -58,6 +70,12 @@ async function loadLoggedInUserName(user) {
     console.log('PROFILE NAME LOAD ERROR:', error.message);
   }
 }
+
+// ===============================================
+// PANEL 3: SIGN-IN AND LOGOUT CONTROL
+// HTML CONNECTION: #authBtn in ecosystem.html changes between Sign In and Log Out.
+// IF THIS PANEL BREAKS: check #authBtn and Firebase Auth state first.
+// ===============================================
 
 // this connects the #authBtn link from ecosystem.html to the live Firebase login state.
 const ecosystemAuthBtn = document.getElementById('authBtn');
@@ -93,11 +111,23 @@ if (ecosystemAuthBtn) {
   });
 }
 
+// ===============================================
+// PANEL 4: FEED CONTAINER
+// HTML CONNECTION: .feed-container in ecosystem.html receives every Firestore post card.
+// IF THIS PANEL BREAKS: check the .feed-container class and the posts collection name.
+// ===============================================
+
 // this finds the place on the page where the posts will be shown.
 // this is the main feed container.
 const feedContainer = document.querySelector('.feed-container');
 
 // this function loadPosts() is responsible for fetching posts from the Firestore database and displaying them in the feedContainer. It logs the start of the process, retrieves the posts collection, and handles both success and error cases.
+// ===============================================
+// PANEL 5: POST CARD CREATION
+// HTML CONNECTION: each generated .dashboard-card contains one post and its actions.
+// IF THIS PANEL BREAKS: check the post fields and the card.innerHTML block below.
+// ===============================================
+
 function loadPosts() {
 
   // this logs "FIREBASE LOAD POSTS START" to the console, indicating that the process of loading posts from Firestore has begun. This is useful for debugging and tracking the flow of the application.
@@ -142,6 +172,12 @@ function loadPosts() {
       // these values decide whether the heart should be filled red or plain black on reload.
       const likeIconClass = isLikedSaved ? 'fa-solid text-red-500' : 'fa-regular';
       const likeIconColor = isLikedSaved ? 'red' : 'black';
+
+      // ===============================================
+      // PANEL 6: POST ACTIONS AND COMMENTS
+      // HTML CONNECTION: #post-actions, #like, #like-count, and #comments IDs are created below.
+      // IF THIS PANEL BREAKS: check that every generated post ID is used consistently.
+      // ===============================================
 
       // this sets the class name of the newly created card div to "dashboard-card". This class can be used for styling the card with CSS, ensuring that all post cards have a consistent appearance.
       card.className = 'dashboard-card';
@@ -192,6 +228,12 @@ function loadPosts() {
         </div>
       `;
 
+      // ===============================================
+      // PANEL 7: IMAGE LIKE CONTROL
+      // HTML CONNECTION: the generated post image calls likePost() when clicked.
+      // IF THIS PANEL BREAKS: check the image selector and likePost() in ecosystem-like.js.
+      // ===============================================
+
       // IF THE IMAGE DOES NOT LIKE OR UNLIKE, CHECK THIS SECTION.
       // IF THE CLICK IS NOT BINDING, CHECK THE image selector and the post ID.
       // this lets the user tap on the image to like or unlike the post.
@@ -215,6 +257,12 @@ function loadPosts() {
       if (typeof loadCommentCount === 'function') loadCommentCount(post.id);
     });
   })
+
+  // ===============================================
+  // PANEL 8: FEED ERROR DISPLAY
+  // HTML CONNECTION: errors are written into .feed-container in ecosystem.html.
+  // IF THIS PANEL BREAKS: check the browser console and Firestore rules.
+  // ===============================================
 
   // this catch block handles any errors that occur during the process of loading posts from Firestore. If an error is encountered, it logs the error code and message to the console for debugging purposes and updates the feedContainer's inner HTML to display an error message to the user.
   .catch(err => {
