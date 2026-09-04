@@ -63,7 +63,8 @@ input, button, textarea {
   background: rgba(255, 255, 255, 0.45); 
   backdrop-filter: blur(16px); 
   -webkit-backdrop-filter: blur(16px); 
-  border: 1px solid rgba(255, 255, 255, 0.6); 
+  /* this gives the Interlock search field a visible edge on the light navbar. */
+  border: 1px solid #b8c4d4;
   padding: 8px 14px; border-radius: 24px;
   transition: border-color 0.2s, background-color 0.2s;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
