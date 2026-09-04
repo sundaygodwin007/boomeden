@@ -40,18 +40,41 @@ db = firebase.firestore();
 // this starts Firebase Auth on the page so Firestore requests include the current user's login token.
 const ecosystemAuth = firebase.auth();
 
+// this finds the username heading from ecosystem.html so the hardcoded @godwin9 text can become dynamic.
+const userHandle = document.getElementById('userHandle');
+
+// this loads the signed-in user's own profile document and displays the best available name.
+async function loadLoggedInUserName(user) {
+  if (!userHandle || !user) return;
+
+  try {
+    const userSnapshot = await db.collection('users').doc(user.uid).get();
+    const profile = userSnapshot.exists ? userSnapshot.data() : {};
+    const displayName = profile.username || profile.firstName || user.email.split('@')[0];
+    userHandle.textContent = `@${displayName}`;
+  } catch (error) {
+    // if the profile read fails, the email prefix still gives the user a useful label.
+    userHandle.textContent = `@${user.email.split('@')[0]}`;
+    console.log('PROFILE NAME LOAD ERROR:', error.message);
+  }
+}
+
 // this connects the #authBtn link from ecosystem.html to the live Firebase login state.
 const ecosystemAuthBtn = document.getElementById('authBtn');
 
 // this changes the button into a real logout control after Firebase confirms the user is signed in.
 ecosystemAuth.onAuthStateChanged((user) => {
   if (user) {
+    // this updates the #userHandle element after Firebase confirms the current session.
+    loadLoggedInUserName(user);
     localStorage.setItem('boomedenUser', JSON.stringify({ uid: user.uid, email: user.email }));
     if (ecosystemAuthBtn) {
       ecosystemAuthBtn.style.display = 'inline-flex';
       ecosystemAuthBtn.textContent = 'Log Out';
     }
   } else {
+    // this resets the sidebar label when Firebase confirms that no user is signed in.
+    if (userHandle) userHandle.textContent = '@user';
     localStorage.removeItem('boomedenUser');
     if (ecosystemAuthBtn) {
       ecosystemAuthBtn.style.display = 'inline-flex';
