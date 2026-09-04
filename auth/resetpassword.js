@@ -1,4 +1,4 @@
-// this connects the custom reset page to the same Firebase project as login and signup.
+// this connects the custom reset page to the secure server-side OTP reset function.
 const firebaseConfig = {
   apiKey: "AIzaSyD2dnVrNfzx8ktUT4s2ocJ5Q2-VhJR66A4",
   authDomain: "boomer-431e6.firebaseapp.com",
@@ -8,39 +8,36 @@ const firebaseConfig = {
   appId: "1:481343133195:web:ef20f718dd4ae4e574990e"
 };
 
-// this starts Firebase Auth so the page can validate the secure reset link.
+// this starts Firebase Functions so password changes are checked by the trusted backend.
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const params = new URLSearchParams(window.location.search);
-const mode = params.get('mode');
-const actionCode = params.get('oobCode');
-// these selectors connect this script to the matching IDs in auth/resetpassword.html.
-// if the form stops responding, check these IDs in that HTML file first.
+const functions = firebase.functions();
+const confirmPasswordOtpReset = functions.httpsCallable('confirmPasswordOtpReset');
+
+// these values were created by forgot.js after the server verified the OTP.
+const resetTicket = localStorage.getItem('passwordResetTicket');
+const resetEmail = localStorage.getItem('passwordResetEmail');
 const emailText = document.getElementById('emailText');
 const resetButton = document.getElementById('reset');
+const loadingText = document.getElementById('loading');
 
-// this checks the reset code before allowing the user to choose a new password.
-if (mode !== 'resetPassword' || !actionCode) {
-  emailText.textContent = 'This password reset link is invalid or incomplete.';
+// this connects the reset form inputs to the IDs in auth/resetpassword.html.
+const passwordInput = document.getElementById('password');
+const confirmInput = document.getElementById('confirm');
+
+// this prevents a visitor from opening the page directly without first verifying an OTP.
+if (!resetTicket || !resetEmail) {
+  emailText.textContent = 'This password reset session is invalid or expired.';
   resetButton.disabled = true;
 } else {
-  auth.verifyPasswordResetCode(actionCode)
-    .then((email) => {
-      emailText.textContent = `Resetting password for: ${email}`;
-    })
-    .catch(() => {
-      emailText.textContent = 'This password reset link has expired or was already used.';
-      resetButton.disabled = true;
-    });
+  emailText.textContent = `Resetting password for: ${resetEmail}`;
 }
 
-// this confirms the new password directly with Firebase after the reset code is verified.
-resetButton.addEventListener('click', () => {
-  // these two inputs are the password and confirmation fields from resetpassword.html.
-  const password = document.getElementById('password').value;
-  const confirmPassword = document.getElementById('confirm').value;
+// this submits the new password together with the one-time server ticket.
+resetButton.addEventListener('click', async () => {
+  const password = passwordInput.value;
+  const confirmPassword = confirmInput.value;
 
-  if (!actionCode || resetButton.disabled) return;
+  if (!resetTicket) return;
   if (password.length < 6) {
     alert('Password must be at least 6 characters long.');
     return;
@@ -51,13 +48,16 @@ resetButton.addEventListener('click', () => {
   }
 
   resetButton.disabled = true;
-  auth.confirmPasswordReset(actionCode, password)
-    .then(() => {
-      alert('Password changed successfully. Please log in.');
-      window.location.href = 'login.html';
-    })
-    .catch((error) => {
-      resetButton.disabled = false;
-      alert('Unable to change password: ' + error.message);
-    });
+  loadingText.style.display = 'block';
+  try {
+    await confirmPasswordOtpReset({ ticket: resetTicket, newPassword: password });
+    localStorage.removeItem('passwordResetTicket');
+    localStorage.removeItem('passwordResetEmail');
+    alert('Password changed successfully. Please log in.');
+    window.location.href = 'login.html';
+  } catch (error) {
+    resetButton.disabled = false;
+    loadingText.style.display = 'none';
+    alert(error.message || 'Unable to change password.');
+  }
 });
