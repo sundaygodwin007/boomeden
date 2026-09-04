@@ -193,14 +193,14 @@
 
 
     /* Main App Layout Grid */
-    /* this lets the main ecosystem content grow on wide screens instead of staying in a small centered box. */
+    /* this lets the ecosystem use a wide monitor like a real product workspace instead of staying in a small centered box. */
     .app-layout {
-      max-width: 1600px;
+      max-width: 1920px;
       margin: 0 auto;
-      padding: 24px clamp(16px, 2.5vw, 36px);
+      padding: 28px clamp(20px, 3vw, 48px);
       display: grid;
-      grid-template-columns: minmax(210px, 240px) minmax(0, 1fr) minmax(260px, 300px);
-      gap: clamp(16px, 2vw, 28px);
+      grid-template-columns: minmax(250px, 280px) minmax(680px, 1fr) minmax(320px, 360px);
+      gap: clamp(24px, 2.2vw, 36px);
       width: 100%;
       height: calc(100vh - 64px);
       overflow: hidden;
@@ -211,8 +211,9 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
-      height: 100%;
-      overflow: hidden;
+      height: auto;
+      overflow: visible;
+      align-self: start;
     }
 
     /* Middle Column (Scrollable) */
@@ -250,8 +251,8 @@
     .sidebar-card {
       display: flex;
       flex-direction: column;
-      height: 100%;
-      justify-content: space-between;
+      height: auto;
+      justify-content: flex-start;
       padding: 14px;
     }
 
@@ -579,22 +580,22 @@
 
     /* Occupied Card Panel Style for Quick Directory */
     .directory-card {
-      flex: 1;
+      flex: none;
       display: flex;
       flex-direction: column;
       padding: 16px;
     }
 
     .directory-card .modules-nav {
-      flex: 1;
-      justify-content: space-around; /* Spreads the items out nicely to fully occupy the card space */
+      flex: none;
+      justify-content: flex-start;
     }
 
     /* Responsive Design */
     /* this keeps all three ecosystem columns usable on medium desktop screens. */
     @media (max-width: 1200px) {
       .app-layout {
-        grid-template-columns: 210px minmax(0, 1fr) 250px;
+        grid-template-columns: 220px minmax(560px, 1fr) 280px;
         gap: 16px;
       }
 
@@ -604,6 +605,14 @@
 
       .search-container input {
         width: 180px;
+      }
+    }
+
+    /* this gives a medium desktop enough room for the feed before the layout removes the side rails. */
+    @media (min-width: 1201px) and (max-width: 1650px) {
+      .app-layout {
+        grid-template-columns: 230px minmax(600px, 1fr) 290px;
+        gap: 22px;
       }
     }
 
