@@ -35,7 +35,8 @@ sendOtpButton.addEventListener('click', async () => {
     otpStep.style.display = 'block';
     alert('If that account exists, a verification code has been sent.');
   } catch (error) {
-    alert(error.message || 'Unable to send the verification code.');
+    // this displays the backend's useful message instead of hiding every failure behind "internal".
+    alert(error.message || 'The OTP service is not deployed or is unavailable.');
     sendOtpButton.disabled = false;
   }
 });

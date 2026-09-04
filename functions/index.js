@@ -59,8 +59,10 @@ exports.requestPasswordOtp = functions.https.onCall(async (data) => {
   });
 
   if (!emailResponse.ok) {
+    const emailError = await emailResponse.text();
+    console.error("EMAILJS OTP ERROR:", emailResponse.status, emailError);
     await requestRef.delete();
-    throw new functions.https.HttpsError("internal", "The verification email could not be sent.");
+    throw new functions.https.HttpsError("failed-precondition", "The verification email service rejected the request. Check the EmailJS service and template settings.");
   }
 
   return genericResponse;
