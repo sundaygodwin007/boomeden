@@ -28,8 +28,11 @@ const firebaseConfig = {
 };
 
 // THIS ACTIVATES THE FIREBASE
-  const db = firebase.firestore();
-  
+  if (!firebase.apps || !firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const db = window.db || firebase.firestore();
+  window.db = db;
 
   // WHEN USER TYPES
   // THIS HELPS THE JAVASCRIPT TO LISTEN TO THE EVENT INPUT WHICH MEANS TYPING...THEN GAVE IT A FUNCTION/WHAT TO DO NEXT
