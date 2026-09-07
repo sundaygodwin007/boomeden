@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BooMeden Merchant Studio — Vendor Management Portal</title>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+  <!-- Google Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <link rel="stylesheet" href="./merchant.css">
+</head>
+<body>
+
+  <!-- EXECUTIVE MERCHANT HEADER -->
+  <header class="merchant-header">
+    <div class="brand-group">
+      <div class="brand-logo">B</div>
+      <span class="brand-name">Merchant Studio<span class="edition-tag">PORTAL</span></span>
+    </div>
+    <div class="header-actions">
+      <a href="./markethub.html" class="market-return-btn"><i class="fa-solid fa-arrow-left"></i> Return to MarketHub</a>
+    </div>
+  </header>
+
+  <!-- MAIN STUDIO CONTAINER -->
+  <main class="studio-container">
+
+    <!-- VIEW 1: CREATE SHOP ONBOARDING WIZARD (Shown if merchant has no shop) -->
+    <section class="studio-view" id="setupShopView">
+      <div class="wizard-card">
+        <div class="wizard-icon"><i class="fa-solid fa-store"></i></div>
+        <h2>Launch Your Digital Storefront</h2>
+        <p>Establish your verified merchant profile on BooMeden. Zero listing fees and direct customer negotiation channels.</p>
+
+        <form id="createShopForm" onsubmit="handleCreateShop(event)">
+          <div class="form-group">
+            <label>Store Name</label>
+            <input type="text" id="shopNameInput" placeholder="e.g., Apex Luxury Apparel" required />
+          </div>
+          <div class="form-group">
+            <label>Store Category</label>
+            <select id="shopCategoryInput" required>
+              <option value="fashion">Apparel & Fashion</option>
+              <option value="electronics">Tech & Electronics</option>
+              <option value="food">Artisanal Food & Groceries</option>
+              <option value="beauty">Beauty & Personal Care</option>
+            </select>
+          </div>
+          
+          <!-- FILE UPLOAD INPUT FOR STORE LOGO -->
+          <div class="form-group">
+            <label>Store Logo Image</label>
+            <div class="file-upload-box" onclick="document.getElementById('shopLogoFile').click()">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <span id="logoFileName">Click to select logo image from device</span>
+            </div>
+            <input type="file" id="shopLogoFile" accept="image/*" style="display:none;" onchange="previewLogoFile(event)" required />
+          </div>
+
+          <button type="submit" class="btn-primary-action">Initialize Storefront</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- VIEW 2: MERCHANT DASHBOARD & PRODUCT UPLOAD (Shown if shop exists) -->
+    <section class="studio-view hidden" id="dashboardView">
+      
+      <!-- Dashboard Top Summary Bar -->
+      <div class="dashboard-topbar">
+        <div class="store-identity">
+          <img id="dashStoreLogo" src="https://i.imgur.com/placeholder-avatar.png" alt="Store Logo" />
+          <div>
+            <h2 id="dashStoreName">Store Name</h2>
+            <span class="verified-badge"><i class="fa-solid fa-circle-check"></i> Verified Merchant Account</span>
+          </div>
+        </div>
+        <button class="btn-secondary-action" onclick="openProductModal()"><i class="fa-solid fa-plus"></i> Add New Inventory Item</button>
+      </div>
+
+      <!-- Active Inventory Catalog Grid -->
+      <div class="inventory-section">
+        <h3>Active Store Catalog</h3>
+        <div class="inventory-grid" id="merchantInventoryGrid">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- PRODUCT UPLOAD MODAL WIZARD -->
+  <div class="modal-backdrop" id="productModalBackdrop" onclick="closeProductModal()"></div>
+  <div class="product-modal" id="productModal">
+    <div class="modal-header">
+      <h3>Add New Catalog Item</h3>
+      <button class="close-modal-btn" onclick="closeProductModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="addProductForm" onsubmit="handleAddProduct(event)">
+      <div class="form-group">
+        <label>Product Name</label>
+        <input type="text" id="prodName" placeholder="e.g., Premium Wireless Headphones" required />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Price (₦)</label>
+          <input type="number" id="prodPrice" placeholder="25000" required />
+        </div>
+        <div class="form-group">
+          <label>Sector Category</label>
+          <select id="prodCategory" required>
+            <option value="fashion">Apparel & Fashion</option>
+            <option value="electronics">Tech & Electronics</option>
+            <option value="food">Artisanal Food</option>
+            <option value="beauty">Beauty & Care</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Product Image URL</label>
+        <input type="url" id="prodImage" placeholder="https://example.com/product.jpg" required />
+      </div>
+      <button type="submit" class="btn-primary-action">Publish to Marketplace</button>
+    </form>
+  </div>
+
+  <script src="./merchant.js"></script>
+</body>
+</html>

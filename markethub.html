@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BooMeden MarketHub — Elite Ecosystem Marketplace</title>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+  <!-- Google Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <link rel="stylesheet" href="./markethub.css">
+</head>
+<body>
+
+  <!-- EXECUTIVE NAVIGATION BAR -->
+  <header class="hub-header">
+    <div class="brand-group">
+      <div class="brand-logo">B</div>
+      <span class="brand-name">MarketHub<span class="edition-tag">PRO</span></span>
+    </div>
+
+    <div class="header-center-nav">
+      <a href="#" class="nav-link active">Explore</a>
+      <a href="#" class="nav-link" onclick="openShopDirectory()">Verified Shops</a>
+      <a href="#" class="nav-link" onclick="openEscrowInfo()">Secure Escrow</a>
+    </div>
+
+    <div class="header-actions">
+      <button class="icon-btn" onclick="toggleWishlist()" title="Saved Items"><i class="fa-regular fa-bookmark"></i></button>
+      <button class="icon-btn cart-trigger" onclick="openCart()" title="Cart">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <span class="badge" id="cart-count">0</span>
+      </button>
+      <a href="../ecosystem/ecosystem.html" class="ecosystem-return">Ecosystem Hub</a>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="hero-inner">
+      <div class="hero-badge"><i class="fa-solid fa-wand-magic-sparkles"></i> Powered by Boom AI Vision</div>
+      <h1>Direct Commerce. Intelligent Discovery.</h1>
+      <p>Source unique inventory directly from verified local merchants or let AI scan visual assets to locate exact matches instantly.</p>
+
+      <div class="search-executive-bar">
+        <div class="search-field">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="search-input" placeholder="Search catalog items, tags, or brands..." onkeyup="handleTextSearch(event)" />
+        </div>
+        <button class="btn-ai-scan" onclick="openCameraScanner()">
+          <i class="fa-solid fa-camera-retro"></i> <span>AI Visual Scan</span>
+        </button>
+        <button class="btn-merchant" onclick="openCreateShopModal()">
+          <i class="fa-solid fa-store"></i> <span>Launch Shop</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN APP CONTAINER -->
+  <main class="app-container">
+
+    <!-- TOP VERIFIED SHOPS CAROUSEL -->
+    <section class="content-section">
+      <div class="section-heading">
+        <div>
+          <h3>Top Rated Merchants</h3>
+          <p>Curated storefronts with verified satisfaction ratings</p>
+        </div>
+        <button class="text-btn" onclick="openShopDirectory()">View All Directory</button>
+      </div>
+      <div class="merchant-scroll-row" id="top-shops-container"></div>
+    </section>
+
+    <!-- STICKY SECTOR FILTER -->
+    <div class="filter-sticky-bar">
+      <div class="filter-pills" id="filterContainer">
+        <button class="filter-pill active" onclick="filterProducts('all', event)">All Catalog</button>
+        <button class="filter-pill" onclick="filterProducts('fashion', event)">Apparel & Fashion</button>
+        <button class="filter-pill" onclick="filterProducts('electronics', event)">Tech & Electronics</button>
+        <button class="filter-pill" onclick="filterProducts('food', event)">Artisanal Food</button>
+        <button class="filter-pill" onclick="filterProducts('beauty', event)">Beauty & Care</button>
+      </div>
+      <button class="filter-options-trigger" onclick="openFilterModal()"><i class="fa-solid fa-sliders"></i> Filters</button>
+    </div>
+
+    <!-- CATALOG GRID -->
+    <section class="content-section">
+      <div class="section-heading">
+        <div>
+          <h3 id="grid-title">Marketplace Inventory</h3>
+          <p id="result-count">Synchronizing real-time catalog...</p>
+        </div>
+      </div>
+      <div class="catalog-grid" id="product-grid-container"></div>
+    </section>
+
+    <!-- MERCHANT BANNER -->
+    <section class="merchant-banner">
+      <div class="banner-content">
+        <h2>Scale Your Brand on BooMeden</h2>
+        <p>Zero listing fees, transparent milestone-based escrow payouts, and direct automated chat negotiation tools built for independent business owners.</p>
+      </div>
+      <button class="btn-banner-action" onclick="openCreateShopModal()">Open Merchant Store</button>
+    </section>
+
+  </main>
+
+  <!-- AI SCAN SOURCE SELECTION MODAL -->
+  <div class="modal-backdrop" id="scanModalBackdrop" onclick="closeScanModal()"></div>
+  <div class="scan-selection-modal" id="scanModal">
+    <div class="modal-header">
+      <h3>Boom AI Visual Scan</h3>
+      <button class="close-modal-btn" onclick="closeScanModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <p>Choose how you want to provide visual assets for AI matching:</p>
+    <div class="scan-options-list">
+      <button class="scan-option-item" onclick="startLiveCameraStream('photo')">
+        <div class="option-icon"><i class="fa-solid fa-camera"></i></div>
+        <div>
+          <h4>Snap Live Photo</h4>
+          <p>Open live camera viewfinder</p>
+        </div>
+      </button>
+      <button class="scan-option-item" onclick="startLiveCameraStream('video')">
+        <div class="option-icon"><i class="fa-solid fa-video"></i></div>
+        <div>
+          <h4>Record Live Video Clip</h4>
+          <p>Record a short video clip via camera</p>
+        </div>
+      </button>
+      <button class="scan-option-item" onclick="triggerFolderSelect()">
+        <div class="option-icon"><i class="fa-solid fa-folder-open"></i></div>
+        <div>
+          <h4>Upload from Folder</h4>
+          <p>Select image or video from device files</p>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <!-- LIVE CAMERA STREAM VIEWPORT MODAL -->
+  <div class="live-camera-modal" id="liveCameraModal">
+    <div class="live-camera-header">
+      <span id="cameraModeTitle">Live Camera Viewfinder</span>
+      <button onclick="closeLiveCameraStream()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="video-container">
+      <video id="liveVideoElement" autoplay playsinline muted></video>
+      <canvas id="captureCanvas" style="display:none;"></canvas>
+    </div>
+    <div class="live-camera-controls">
+      <button class="btn-capture-action" id="shutterBtn" onclick="captureLiveMedia()">
+        <i class="fa-solid fa-circle"></i> <span id="shutterLabel">Snap Photo</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Standard Fallback Input -->
+  <input type="file" id="folder-file-input" accept="image/*,video/*" style="display:none;" onchange="handleFileSelected(event)">
+
+  <!-- EMBEDDED NEGOTIATION & CHAT DRAWER -->
+  <div class="chat-drawer-backdrop" id="chatDrawerBackdrop" onclick="closeChatDrawer()"></div>
+  <aside class="chat-drawer" id="chatDrawer">
+    <div class="chat-header">
+      <div class="chat-merchant-info">
+        <img id="chatMerchantAvatar" src="https://i.imgur.com/placeholder-avatar.png" alt="Merchant">
+        <div>
+          <h4 id="chatMerchantName">Vendor Name</h4>
+          <span class="status-indicator">● Secure Direct Line</span>
+        </div>
+      </div>
+      <button class="close-drawer" onclick="closeChatDrawer()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <div class="chat-product-context" id="chatProductContext"></div>
+    <div class="chat-messages-area" id="chatHistory"></div>
+
+    <div class="negotiation-action-bar" id="offerBubble">
+      <p id="offerText">Accept merchant price offer?</p>
+      <div class="offer-actions">
+        <button class="btn-decline" onclick="respondToOffer(false)">Decline</button>
+        <button class="btn-accept" onclick="respondToOffer(true)">Accept & Escrow</button>
+      </div>
+    </div>
+
+    <div class="chat-input-row">
+      <input type="text" id="chatInput" placeholder="Type a message or counter-offer..." onkeypress="handleChatKey(event)" />
+      <button onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+  </aside>
+
+  <script src="./markethub.js"></script>
+</body>
+</html>
